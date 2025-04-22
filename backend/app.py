@@ -1,6 +1,15 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+import psycopg2
 
+def get_db_connection():
+    return psycopg2.connect(
+        host='db',
+        port=5432,
+        database='mydatabase',
+        user='myuser',
+        password='mypassword'
+    )
 
 app = Flask(__name__)
 # CORS(app)
@@ -45,6 +54,20 @@ def delete_user(user_id):
     global users
     users = [user for user in users if user["id"] != user_id]
     return jsonify({"message": "User deleted"}), 200
+
+@app.route('/api/db-check')
+def db_check():
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute('SELECT version();')
+        version = cur.fetchone()
+        cur.close()
+        conn.close()
+        return jsonify({"status": "ok", "version": version})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

@@ -13,6 +13,18 @@ services:
     ports:
       - "3001:80"  # Mapping external port 3001 to internal port 80
 
+  db:
+    image: postgres:15
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   nginx:
     build: ./nginx
     container_name: nginx
@@ -21,3 +33,6 @@ services:
     depends_on:
       - flask-backend
       - react-frontend
+  
+volumes:
+  postgres_data:
