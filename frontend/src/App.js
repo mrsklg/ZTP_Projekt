@@ -1,11 +1,14 @@
+import './styles/global.css'
 import React, { useEffect, useState } from 'react';
 import { Container, Typography, Button, CircularProgress, List, ListItem, ListItemText } from '@mui/material';
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
 
+  const [view, setView] = useState("home");
   useEffect(() => {
     fetch('http://localhost:8080/api/')
       .then(response => response.json())
@@ -25,39 +28,48 @@ function App() {
   }, []);
 
   return (
-    <Container maxWidth="md" style={{ textAlign: 'center', marginTop: '50px' }}>
-      <Typography variant="h2" gutterBottom>
-        Welcome to React & Flask Integration!
-      </Typography>
 
-      {loading ? (
-        <CircularProgress />
-      ) : (
-        <Typography variant="h5" gutterBottom>
-          {message}
+    <Container maxWidth="md" >
+      {view ==="home" && 
+      <Container>
+        <Typography variant="h2" gutterBottom>
+          Welcome to React & Flask Integration!
         </Typography>
-      )}
 
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => window.alert('Button Clicked!')}
-        style={{ marginTop: '20px' }}
-      >
-        Click Me
-      </Button>
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <Typography variant="h5" gutterBottom>
+            {message}
+          </Typography>
+        )}
 
-      <Typography variant="h4" style={{ marginTop: '40px' }}>
-        User List
-      </Typography>
-      <List>
-        {users.map((user) => (
-          <ListItem key={user.id}>
-            <ListItemText primary={`${user.name} (${user.email})`} />
-          </ListItem>
-        ))}
-      </List>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => window.alert('Button Clicked!')}
+          style={{ marginTop: '20px' }}
+        >
+          Click Me
+        </Button>
+
+        <Typography variant="h4" style={{ marginTop: '40px' }}>
+          User List
+        </Typography>
+        <List>
+          {users.map((user) => (
+            <ListItem key={user.id}>
+              <ListItemText primary={`${user.name} (${user.email})`} />
+            </ListItem>
+          ))}
+        </List>
+        <Button onClick={()=> setView("login")}> Login </Button>
+        <a href="https://storyset.com/user">User illustrations by Storyset</a>
+      </Container> }
+      {view === "login" && <LoginPage />}
+
     </Container>
+    
   );
 }
 
