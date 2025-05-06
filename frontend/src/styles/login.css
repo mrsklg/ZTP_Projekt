@@ -1,0 +1,85 @@
+.login-page {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.login-image {
+    position: absolute;
+    width: 50vw;
+    z-index: 0;
+    max-width: 100%;
+    object-fit: contain;
+    max-height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin-left: 10%;
+}
+
+.form-container {
+    z-index: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: aliceblue;
+    border-radius: 16px;
+    padding: 30px;
+    width: 320px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    margin-bottom: 15px;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-icon-wrapper{
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.input-icon-wrapper input {
+    padding: 8px 8px 8px 36px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    width: 100%;
+}
+
+.input-icon {
+    position: absolute;
+    left: 10px;
+    color: #999;
+    pointer-events: none; /* pozwala kliknąć input pod ikoną */
+}
+
+input {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-top: 5px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #BA68C8;
+    color: white;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #155ab6;
+}
