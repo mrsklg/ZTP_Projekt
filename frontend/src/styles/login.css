@@ -1,5 +1,5 @@
 .login-page {
-    height: 100vh;
+    height: 90vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -8,7 +8,7 @@
 
 .login-image {
     position: absolute;
-    width: 50vw;
+    width: 600px;
     z-index: 0;
     max-width: 100%;
     object-fit: contain;
@@ -37,10 +37,17 @@ form {
 }
 
 .form-label {
+    width: -webkit-fill-available;
     margin-bottom: 15px;
     font-weight: bold;
     display: flex;
     flex-direction: column;
+}
+
+.full-name{
+    width: 100%;
+    display: flex;
+    gap: 10px;
 }
 
 .input-icon-wrapper{
@@ -82,4 +89,21 @@ button {
 
 button:hover {
     background-color: #155ab6;
+}
+
+@media (max-width: 768px) {
+    .login-image {
+        display: none;
+    }
+
+    .login-page {
+        width: 100vw;
+        padding: 20px;
+    }
+
+    .form-container {
+        width: 100%;
+        max-width: 100%;
+        padding: 20px;
+    }
 }

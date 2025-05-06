@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { loginUser } from "../api/auth";
-import {user} from 'react-icons-kit/fa/user';
-import {lock} from 'react-icons-kit/ikons/lock';
+import { mail } from 'react-icons-kit/ikons/mail'
+import { lock } from 'react-icons-kit/ikons/lock';
 import { Icon } from 'react-icons-kit';
 
 export default function LoginForm() {
@@ -19,7 +19,7 @@ export default function LoginForm() {
             <form onSubmit={handleSubmit}>
                 <label className="form-label">Email
                     <div className="input-icon-wrapper">
-                        <Icon icon={user} className="input-icon"/>
+                        <Icon icon={mail} className="input-icon"/>
                         <input value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email" />
                     </div>
                 </label>
