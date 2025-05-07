@@ -3,6 +3,7 @@ import { loginUser } from "../api/auth";
 import { mail } from 'react-icons-kit/ikons/mail'
 import { lock } from 'react-icons-kit/ikons/lock';
 import { Icon } from 'react-icons-kit';
+import { Link } from "react-router-dom";
 
 export default function LoginForm() {
     const [email, setEmail] = useState("")
@@ -30,7 +31,7 @@ export default function LoginForm() {
                     </div>
                 </label>
                 <div className="form-bottom">
-                    <a href="/register">Don't have an account?</a>
+                    <Link to="/register">Don't have an account?</Link>
                 </div>
                 <button type="submit">Log in</button>
             </form>
