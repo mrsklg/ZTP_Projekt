@@ -70,7 +70,6 @@ form {
 }
 
 .login-page input {
-    padding: 8px;
     border-radius: 6px;
     border: 1px solid #ccc;
     margin-top: 5px;
@@ -79,7 +78,7 @@ form {
 .login-page button {
     margin-top: 10px;
     padding: 10px;
-    background-color: #BA68C8;
+    background-color: var(--coral-pink);
     color: white;
     border: none;
     border-radius: 16px;
@@ -89,6 +88,10 @@ form {
 
 button:hover {
     background-color: #155ab6;
+}
+
+.form-bottom a{
+    color: var(--cambridge-blue)
 }
 
 @media (max-width: 768px) {
