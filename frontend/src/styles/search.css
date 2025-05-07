@@ -1,0 +1,142 @@
+.search-bar {
+    display: flex;
+    border: 1px solid #ccc;
+    border-radius: 9999px;
+    overflow: hidden;
+    max-width: 400px;
+    background-color: var(--beige);
+    align-items: stretch;
+}
+
+.search-icon {
+    padding: 0.5rem 1rem;
+}
+
+.close-icon{
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.search-bar input {
+    background-color: var(--beige);
+    border: none;
+    flex: 1;
+    padding: 0.5rem;
+    outline: none;
+}
+
+.search-bar button {
+    background-color: var(--cambridge-blue);
+    color: black;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    padding: 0.5rem 1rem;
+    border-top-right-radius: 9999px;
+    border-bottom-right-radius: 9999px;
+}
+
+.search-bar button:hover {
+    background-color: var(--cambridge-blue-2);
+}
+
+.search-bar:focus-within {
+    border: 1.5px solid var(--cambridge-blue);
+    box-shadow: 0 0 0 2px var(--cambridge-blue-2); 
+}
+
+.search-results{
+    margin-left: 1rem;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--beige);
+    border: 1px;
+    border-radius: 0 0 32px 32px;
+}
+.search-results h2{
+    margin-left: 2rem;
+}
+.movie-result {
+    margin-left: 2rem;
+    margin-right: 2rem;
+    display: flex;
+    border: 1px solid var(--ash-gray);
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--beige);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem; 
+    transition: transform 0.2s, box-shadow 0.2s;
+    align-items: center;
+}
+
+.movie-result:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.movie-result img {
+    background-color: white;
+    width: 150px;
+    height: auto;
+    object-fit: cover;
+    border-right: 1px solid var(--ash-gray);
+}
+
+.movie-result .movie-info {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex: 1;
+}
+
+.movie-result h3 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.movie-result p {
+    margin: 0.25rem 0;
+}
+
+.movie-result .genre {
+    font-style: italic;
+    color: var(--coral-pink);
+    margin-top: 1rem;
+}
+
+.movie-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 1em;
+    margin-right: 1em;
+}
+
+.movie-options-button {
+    background-color: var(--cambridge-blue);
+    color: black;
+    border: none;
+    padding: 10px 1em;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
+    text-align: center;
+}
+
+.movie-options-button:hover {
+    background-color: var(--cambridge-blue-2);
+    transform: translateY(-2px);
+}
+
+.movie-options-button:active {
+    background-color: var(--cambridge-blue-2);
+    transform: translateY(1px);
+}
+

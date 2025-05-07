@@ -69,14 +69,14 @@ form {
     pointer-events: none; /* pozwala kliknąć input pod ikoną */
 }
 
-input {
+.login-page input {
     padding: 8px;
     border-radius: 6px;
     border: 1px solid #ccc;
     margin-top: 5px;
 }
 
-button {
+.login-page button {
     margin-top: 10px;
     padding: 10px;
     background-color: #BA68C8;
