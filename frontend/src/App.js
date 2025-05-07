@@ -2,6 +2,7 @@ import './styles/global.css'
 import React, { useEffect, useState } from 'react';
 import { Container, Typography, Button, CircularProgress, List, ListItem, ListItemText } from '@mui/material';
 import LoginPage from "./pages/LoginPage";
+import RegisterPage from './pages/RegisterPage';
 
 function App() {
   const [message, setMessage] = useState('');
@@ -29,7 +30,7 @@ function App() {
 
   return (
 
-    <Container maxWidth="md" >
+    <>
       {view ==="home" && 
       <Container>
         <Typography variant="h2" gutterBottom>
@@ -64,11 +65,13 @@ function App() {
           ))}
         </List>
         <Button onClick={()=> setView("login")}> Login </Button>
-        <a href="https://storyset.com/user">User illustrations by Storyset</a>
+        <Button onClick={()=> setView("register")}> Register </Button>
+        
       </Container> }
       {view === "login" && <LoginPage />}
+      {view === "register" && <RegisterPage />}
 
-    </Container>
+    </>
     
   );
 }

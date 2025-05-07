@@ -5,3 +5,38 @@ body{
     padding: 0;
 
 }
+*,*::before,*::after{
+    box-sizing: border-box;
+}
+
+.footer{
+    background-color: #e0e0e0; 
+    color: #1f2937; 
+    padding: 0 3%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 10vh;
+}
+
+.footer-column{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .footer {
+        flex-direction: column;
+        align-items: center;
+        height: auto;
+        padding: 20px 5%;
+        gap: 20px;
+    }
+
+    .footer-column {
+        align-items: flex-start;
+    }
+}
