@@ -24,7 +24,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    background-color: aliceblue;
+    background-color: var(--ash-gray);
     border-radius: 16px;
     padding: 30px;
     width: 320px;
@@ -79,7 +79,7 @@ input {
 button {
     margin-top: 10px;
     padding: 10px;
-    background-color: #BA68C8;
+    background-color: var(--coral-pink);
     color: white;
     border: none;
     border-radius: 16px;
@@ -88,7 +88,7 @@ button {
 }
 
 button:hover {
-    background-color: #155ab6;
+    background-color: var(--cambridge-blue);
 }
 
 @media (max-width: 768px) {

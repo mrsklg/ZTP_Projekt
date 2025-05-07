@@ -1,5 +1,15 @@
+:root {
+    --antique-white: #FEF1DFff;
+    --coral-pink: #F6A091ff;
+    --ash-gray: #BFD3BDff;
+    --cambridge-blue: #8FB6ABff;
+    --melon: #FDC2AEff;
+    --cambridge-blue-2: #82AFA5ff;
+    --beige: #E6E9D4ff;
+}
+
 body{
-    background-color: #accffe;
+    background-color: var(--antique-white);
     font-family: Arial, Helvetica, sans-serif;
     margin: 0;
     padding: 0;
