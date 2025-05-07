@@ -1,4 +1,6 @@
-# Biblioteka obejrzanych filmów [jakaś nazwa by się przydała]
+# Watchy
+![logo](https://github.com/user-attachments/assets/906c8b93-c478-4fd5-abd7-5c65778526f5)
+
 Aplikacja służąca do śledzenia obejrzanych filmów.
 
 ## Spis treści
