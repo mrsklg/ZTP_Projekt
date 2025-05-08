@@ -22,7 +22,7 @@ function App() {
           <Route path='register' element={<RegisterPage/>} />|
           <Route path='dashboard' element={<DashboardPage/>} />|
           <Route path='browse' element={<BrowsePage/>} />|
-          <Route path='film_details' element={<FilmDetailsPage/>} />|
+          <Route path="/movie/:id" element={<FilmDetailsPage />} />
           <Route path='liked' element={<LikedPage/>} />|
           <Route path='settings' element={<SettingsPage/>} />|
           <Route path='to_watch' element={<ToWatchPage/>} />|

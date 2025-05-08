@@ -69,14 +69,13 @@ form {
     pointer-events: none; /* pozwala kliknąć input pod ikoną */
 }
 
-input {
-    padding: 8px;
+.login-page input {
     border-radius: 6px;
     border: 1px solid #ccc;
     margin-top: 5px;
 }
 
-button {
+.login-page button {
     margin-top: 10px;
     padding: 10px;
     background-color: var(--coral-pink);
@@ -89,6 +88,10 @@ button {
 
 button:hover {
     background-color: var(--cambridge-blue);
+}
+
+.form-bottom a{
+    color: var(--cambridge-blue)
 }
 
 @media (max-width: 768px) {
