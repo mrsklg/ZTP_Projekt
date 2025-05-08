@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import Footer from '../components/Footer';
+
 
 export default function LinksPage() {
   return (
@@ -19,7 +19,7 @@ export default function LinksPage() {
           marginBottom: '30px',
           textAlign: 'center'
         }}>Navigation Links</h1>
-        
+
           <Link to="login">login</Link>
           <Link to="register">register</Link>
           <Link to="dashboard">dashboard</Link>
@@ -30,7 +30,6 @@ export default function LinksPage() {
           <Link to="to_watch">to_watch</Link>
           <Link to="watched">watched</Link>
         </div>
-        <Footer></Footer>
     </>
   );
 }

@@ -1,0 +1,72 @@
+.menu-container {
+    width: 14rem;
+    background-color: var(--coral-pink);
+    padding: 20px 0;
+    flex-shrink: 0;
+    /* Zapobiega zmniejszaniu menu */
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+    /* Przewijanie jeśli zawartość jest za długa */
+}
+
+.menu-top {
+    flex: 1;
+}
+
+.menu-bottom {
+    margin-top: 1rem;
+    padding: 1rem 0;
+    border-top: 3px solid var(--melon);
+}
+
+/* Style linków w menu */
+.menu-container a, .logout-button {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 12px 24px;
+    margin: 4px 0;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+    background: none;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+}
+
+.logout-button {
+    text-align: left;
+}
+
+.menu-container a:hover, .logout-button:hover {
+    background-color: var(--melon);
+    border-left: 4px solid #ff5722;
+}
+
+.menu-link.active {
+    background-color: var(--cambridge-blue-2);
+    border-left: 4px solid var(--beige);
+    font-weight: 600;
+}
+
+.menu-icon {
+    margin-right: 12px;
+    color: var(--antique-white);
+}
+
+.menu-link.active .menu-icon {
+    color: #ffffff;
+}
+
+.logout-button .menu-icon {
+    color: #ff5252;
+}
+
+.logout-button:hover {
+    color: #ff5252;
+}
+
+.hidden {
+    display: none;
+}

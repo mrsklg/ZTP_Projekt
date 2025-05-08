@@ -1,4 +1,3 @@
-import Footer from '../components/Footer';
 import { useParams } from 'react-router-dom';
 
 export default function FilmDetailsPage() {
@@ -7,7 +6,6 @@ export default function FilmDetailsPage() {
     <>
         <h1>FilmDetails</h1>
         informacje o filmie {id}
-        <Footer></Footer>
     </>
   );
 }

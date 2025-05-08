@@ -8,45 +8,28 @@
     --beige: #E6E9D4ff;
 }
 
-body{
+body {
     background-color: var(--antique-white);
     font-family: Arial, Helvetica, sans-serif;
     margin: 0;
     padding: 0;
-
 }
-*,*::before,*::after{
+
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
-.footer{
-    background-color: #e0e0e0; 
-    color: #1f2937; 
-    padding: 0 3%;
+.app-container {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    height: 10vh;
+    min-height: 100vh;
 }
 
-.footer-column{
+.content-container {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
-    justify-content: center;
-}
-
-@media (max-width: 768px) {
-    .footer {
-        flex-direction: column;
-        align-items: center;
-        height: auto;
-        padding: 20px 5%;
-        gap: 20px;
-    }
-
-    .footer-column {
-        align-items: flex-start;
-    }
+    justify-content: space-between;
+    align-items: center;
 }
