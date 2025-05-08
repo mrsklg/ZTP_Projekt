@@ -4,6 +4,7 @@ import {user} from 'react-icons-kit/fa/user';
 import {lock} from 'react-icons-kit/ikons/lock';
 import {mail} from 'react-icons-kit/ikons/mail'
 import { Icon } from 'react-icons-kit';
+import { Link } from "react-router-dom";
 
 export default function RegisterForm() {
     const [email, setEmail] = useState("")
@@ -47,7 +48,7 @@ export default function RegisterForm() {
                     </div>
                 </label>
                 <div className="form-bottom">
-                    <a href="/login">Already have an account?</a>
+                    <Link to="/login">Already have an account?</Link>
                 </div>
                 <button type="submit">Register</button>
             </form>
