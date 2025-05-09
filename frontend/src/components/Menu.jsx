@@ -8,7 +8,7 @@ import {
     cog, 
     home  
 } from 'react-icons-kit/ikons';
-import { check, clockO, film, signOut } from 'react-icons-kit/fa/'
+import { check, clockO, film, signOut, bars, fa } from 'react-icons-kit/fa/'
 import { Icon } from 'react-icons-kit';
 import { useState } from "react";
 
@@ -35,28 +35,45 @@ export default function Menu() {
     ];
 
     return (
-        <div className={`menu-container ${isMobileMenuOpen && "hidden"}`}>
-            <div className="menu-top">
-                {menuItems.map((item) => (
-                    <NavLink 
-                        key={item.to}
-                        to={item.to}
-                        className={({ isActive }) => 
-                            `menu-link ${isActive ? 'active' : ''}`
-                        }
-                    >
-                        <Icon icon={item.icon} size={20} className="menu-icon" />
-                        <span>{item.label}</span>
-                    </NavLink>
-                ))}
-            </div>
+        <>
+            {(isMobileMenuOpen || window.innerWidth >= 768) ? (
+                <div className="menu-container">
+                    <div className="menu-toggle">
+                        <button onClick={() => setIsMobileMenuOpen(prev => !prev)} className="menu-toggle-button">
+                            <Icon icon={bars} size={20} />
+                        </button>
+                    </div>
+                    <div className="menu-top">
+                        {menuItems.map((item) => (
+                            <NavLink 
+                                key={item.to}
+                                to={item.to}
+                                className={({ isActive }) => 
+                                    `menu-link ${isActive ? 'active' : ''}`
+                                }
+                            >
+                                <Icon icon={item.icon} size={20} className="menu-icon" />
+                                <span>{item.label}</span>
+                            </NavLink>
+                        ))}
+                    </div>
 
-            <div className="menu-bottom">
-                <button onClick={handleLogout} className="logout-button">
-                    <Icon icon={signOut} size={20} className="menu-icon" />
-                    <span>Logout</span>
-                </button>
-            </div>
-        </div>
+                    <div className="menu-bottom">
+                        <button onClick={handleLogout} className="logout-button">
+                            <Icon icon={signOut} size={20} className="menu-icon" />
+                            <span>Logout</span>
+                        </button>
+                    </div>
+                </div>) : (
+                    <div className="menu-toggle menu-toggle-floating">
+                        <button
+                            onClick={() => setIsMobileMenuOpen(true)}
+                            className="menu-toggle-button"
+                        >
+                            <Icon icon={bars} size={24} />
+                        </button>
+                    </div>
+                )}
+        </>
     )
 }

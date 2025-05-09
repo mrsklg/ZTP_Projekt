@@ -1,13 +1,15 @@
 .menu-container {
     width: 14rem;
     background-color: var(--coral-pink);
-    padding: 20px 0;
+    padding: 0.5rem 0;
     flex-shrink: 0;
-    /* Zapobiega zmniejszaniu menu */
     position: sticky;
     top: 0;
     overflow-y: auto;
-    /* Przewijanie jeśli zawartość jest za długa */
+    display: block;
+    min-height: 100vh;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(0);
 }
 
 .menu-top {
@@ -69,4 +71,53 @@
 
 .hidden {
     display: none;
+}
+
+.menu-toggle {
+    padding: 0 0.5rem;
+    text-align: right;
+    display: none;
+}
+
+.menu-toggle-inside {
+    padding: 0 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.menu-toggle-floating {
+    background-color: var(--coral-pink);
+    border-radius: 8px;
+    z-index: 1000;
+    height: fit-content;
+    margin: 0.5rem 0 0 0.5rem;
+    position: fixed;
+}
+
+.menu-toggle-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: white;
+    padding: 0.1rem;
+}
+
+.menu-toggle-floating > .menu-toggle-button {
+    padding: 0.5rem 0;
+}
+
+.menu-toggle-button:hover {
+    background-color: var(--melon);
+}
+
+@media (max-width: 768px) {
+    .menu-toggle-floating,
+    .menu-toggle-inside,
+    .menu-toggle {
+        display: block;
+    }
+
+    .menu-container {
+        position: fixed;
+        z-index: 101;
+    }
 }
