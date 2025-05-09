@@ -1,7 +1,7 @@
 import '../styles/login.css'
 import LoginForm from "../components/LoginForm";
 import loginImg from '../assets/login-vector.svg';
-import Footer from '../components/Footer';
+
 
 export default function LoginPage() {
   return (
@@ -10,7 +10,6 @@ export default function LoginPage() {
       <LoginForm />
       <img className='login-image' src={loginImg} alt="Login"></img>
     </div>
-    <Footer></Footer>
     </>
   );
 }

@@ -1,4 +1,3 @@
-import Footer from '../components/Footer';
 import MovieSearch from '../components/MovieSearch';
 import '../styles/dashboard.css'
 
@@ -8,7 +7,6 @@ export default function DashboardPage() {
         <title>Dashboard</title>
         <MovieSearch></MovieSearch>
         dashboard z podsumowaniem, statystykami, linkami do list, itp.
-        <Footer></Footer>
     </>
   );
 }
