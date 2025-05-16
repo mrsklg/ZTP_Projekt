@@ -6,17 +6,8 @@ CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     email TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Tabela: Movies
-CREATE TABLE movies (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    title TEXT NOT NULL,
-    description TEXT,
-    year INTEGER,
-    genre TEXT,
-    imdb_id TEXT UNIQUE,
+    name TEXT NOT NULL,
+    surname TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -24,7 +15,7 @@ CREATE TABLE movies (
 CREATE TABLE likes (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-    movie_id UUID REFERENCES movies(id) ON DELETE CASCADE,
+    movie_id UUID NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(user_id, movie_id)
 );
@@ -33,7 +24,7 @@ CREATE TABLE likes (
 CREATE TABLE watchlist (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-    movie_id UUID REFERENCES movies(id) ON DELETE CASCADE,
+    movie_id UUID NOT NULL,
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(user_id, movie_id)
 );
@@ -42,7 +33,7 @@ CREATE TABLE watchlist (
 CREATE TABLE watched (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-    movie_id UUID REFERENCES movies(id) ON DELETE CASCADE,
+    movie_id UUID NOT NULL,
     watched_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(user_id, movie_id)
 );
