@@ -10,6 +10,7 @@
 }
 
 .limited-search-container{
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -175,10 +176,16 @@
     color: black;
     border: none;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, box-shadow 0.2s, transform 0.2s;
     padding: 0.5rem 1rem;
     border-radius: 9999px;
     margin: 0 2rem 1rem 2rem;
+}
+
+.show-more:hover{
+    background-color: var(--cambridge-blue-2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    transform: scale(1.05);
 }
 
 .poster-info{

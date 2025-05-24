@@ -58,7 +58,6 @@ export default function MovieSearch({ showLimit = false, maxResults = 3, withPag
                 onSearch={handleSearch}
                 onClear={handleClearSearch}
             />
-            {loading && <p>Loading...</p>}
             {error && <p>Error: {error}</p>}
             {movies && movies.length > 0 && (
                 <div className="search-results">

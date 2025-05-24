@@ -12,7 +12,7 @@ export async function addToWatchList(imdbID) {
     alert("Tu sie powinno dodać do watchListy")
 }
 
-export async function getToWatchList() {
+export async function getWatchList() {
     // const response = await fetch(`${BACKEND_API}/watchlist`,{
     //     method: 'GET',
     //     headers: {

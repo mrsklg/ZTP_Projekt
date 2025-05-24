@@ -1,5 +1,11 @@
-.search-bar{
+ .search-bar{
+    position:absolute;
     margin-top: 1rem;
+}
+
+.limited-search-container .search-results{
+    position: absolute;
+    margin-top: 30px;
 }
 
 @media (max-width: 768px) {
