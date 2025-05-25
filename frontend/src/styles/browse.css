@@ -14,3 +14,7 @@
 .search-container h2{
     margin-left: 0;
 }
+
+.search-bar{
+    position: unset;
+}

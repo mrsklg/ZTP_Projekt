@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import MovieTile from "../components/MovieTile";
-import { getToWatchList } from '../api/watchList';
+import MovieListSection from "../components/MovieListSection";
+import { getWatchList } from '../api/watchList';
 import { getMovie } from '../api/movies';
 
 
@@ -13,7 +13,7 @@ export default function WatchedPage() {
     const fetchWatchedMovies = async () => {
       try {
         setLoading(true);
-        const response = await getToWatchList();
+        const response = await getWatchList();
         const data = await response.json();
 
         // Zakładamy, że data to tablica ID np. ["tt1234567", "tt9876543"]
@@ -23,7 +23,6 @@ export default function WatchedPage() {
 
         const moviePromises = data.map((id) => getMovie(id));
         const moviesData = await Promise.all(moviePromises);
-        console.log(moviesData);
         setMovies(moviesData);
       } catch (err) {
         setError(err.message || "Błąd podczas ładowania obejrzanych filmów.");
@@ -37,16 +36,12 @@ export default function WatchedPage() {
 
   return (
     <>
-      <h1>Watched</h1>
-
       {loading && <p>Loading...</p>}
       {error && <p className="error">{error}</p>}
-
-      <div className="movie-grid">
-        {movies && movies.map((movie) => (
-          <MovieTile key={movie.imdbID} movie={movie} />
-        ))}
-      </div>
+      <MovieListSection
+              title="Watched movies"
+              movies={movies}>
+      </MovieListSection>
     </>
   );
 }

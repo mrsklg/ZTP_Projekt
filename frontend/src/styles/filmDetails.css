@@ -1,0 +1,28 @@
+.movie-tile-details{
+    width: 90%;
+    margin: 2rem;    
+}
+
+.movie-tile-details:hover {
+    transform: unset;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    cursor: unset;
+}
+
+.movie-tile-details img{
+    min-width: 200px;
+}
+
+.movie-tile-details .movie-info{
+    justify-content: flex-start;
+    align-items: flex-start;
+    
+}
+
+.movie-tile-details .movie-info h3{
+    font-size: 2rem;
+}
+
+.movie-tile-details .movie-info p{
+    font-size: 1.5rem;
+}
