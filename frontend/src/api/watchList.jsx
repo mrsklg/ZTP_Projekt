@@ -12,6 +12,18 @@ export async function addToWatchList(imdbID) {
     alert("Tu sie powinno dodać do watchListy")
 }
 
+export async function removeFromWatchList(imdbID) {
+    //tu implementacja DELETE żey usunąć film o danym imdbID z wishlisty
+    const response = await fetch(`${BACKEND_API}/watchlist`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ imdbID })
+    })
+    alert("Tu się powinno usunąć z watchListy")
+}
+
 export async function getWatchList() {
     // const response = await fetch(`${BACKEND_API}/watchlist`,{
     //     method: 'GET',

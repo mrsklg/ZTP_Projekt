@@ -119,5 +119,6 @@
     .menu-container {
         position: fixed;
         z-index: 101;
+        height: 100%;
     }
 }

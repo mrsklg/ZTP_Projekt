@@ -12,6 +12,18 @@ export async function addToWishList(imdbID){
     alert("Tu sie powinno dodać do wishListy")
 }
 
+export async function removeFromWishList(imdbID){
+    //tu implementacja DELETE żey usunąć film o danym imdbID z wishlisty
+    const response = await fetch(`${BACKEND_API}/wishlist`,{
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({imdbID})
+    })
+    alert("Tu sie powinno usunąć z wishListy")
+}
+
 export async function getWishList(){
     // const response = await fetch(`${BACKEND_API}/wishlist`,{
     //     method: 'GET',
@@ -22,7 +34,7 @@ export async function getWishList(){
     // return response
 
     //symulacja
-    const dummyMovieIDs = ["tt0133093", "tt0111161", "tt1375666", "tt0120338", "tt0133093", "tt0111161", "tt1375666", "tt0120338", "tt0133093", "tt0111161", "tt1375666", "tt0120338"]; // np. Matrix, Shawshank, Inception
+    const dummyMovieIDs = ["tt1781769", "tt0133093", "tt0111161", "tt1375666", "tt0120338", "tt0133093", "tt0111161", "tt1375666", "tt0120338", "tt0133093", "tt0111161", "tt1375666", "tt0120338"]; // np. Matrix, Shawshank, Inception
 
 
     return new Response(JSON.stringify(dummyMovieIDs), {
