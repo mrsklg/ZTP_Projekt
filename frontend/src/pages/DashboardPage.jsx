@@ -37,7 +37,23 @@ export default function DashboardPage() {
       {loading && <p>Loading...</p>}
       {error && <p className="error">{error}</p>}
         <title>Dashboard</title>
-        <MovieSearch showLimit={true} maxResults={3} withPagination={false}></MovieSearch>
+        <div className='dashboard-summary'>
+          <MovieSearch showLimit={true} maxResults={3} withPagination={false}></MovieSearch>
+          <div className='dashboard-stats'>
+            <div className='dashboard-tile'>
+              <h3>Movies watched</h3>
+              <p>{watchlistMovies.length}</p>
+            </div>
+            <div className='dashboard-tile'>
+              <h3>Movies to watch</h3>
+              <p>{wishlistMovies.length}</p>
+            </div>
+            <div className='dashboard-tile'>
+              <h3>Liked movies</h3>
+              <p>4</p>
+            </div>
+          </div>
+        </div>
         <MovieListSection
               title="Watched movies"
               movies={watchlistMovies}
@@ -52,7 +68,6 @@ export default function DashboardPage() {
               seeMoreLink="/to_watch"
               opposingList={watchlistMovies}
         />
-        dashboard z podsumowaniem, statystykami, linkami do list, itp.
     </>
   );
 }

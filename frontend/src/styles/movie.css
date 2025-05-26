@@ -71,13 +71,14 @@
 
 .movies-section-header{
     display: flex;
+    width: 100%;
     justify-content: space-between;
     align-items: center;
-    margin: 0 1rem;
+    margin: 0 0 0 1rem;
 }
 
 .show-more{
-    margin: 1rem 7%; 
+    margin: 1rem 0; 
 }
 
 .movie-details {
@@ -114,5 +115,13 @@
 @media (max-width: 768px) {
     .show-more{
         margin: 1rem 0;
+    }
+
+    .movie-grid {
+        grid-template-columns: repeat(auto-fit, minmax(100%, 25rem));
+    }
+
+    .movies-section-header {
+        margin: 0 1rem;
     }
 }

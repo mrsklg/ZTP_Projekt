@@ -51,7 +51,6 @@ export default function FilmDetailsPage() {
           movie={movie}
           isDetailsOpened={true}
           currentList={getCurrentList()}
-          // przekazujemy też drugą listę w razie potrzeby
           opposingList={
             getCurrentList() === "wishlist" ? watchlistMovies : wishlistMovies
           }
