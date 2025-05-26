@@ -12,9 +12,6 @@ export default function MovieListSection({ title, movies, maxItems = null, seeMo
 
     const currentList = title === "To watch list" ? "wishlist" : "watchlist";
 
-    console.log(currentList)
-    console.log(opposingList)
-
     return (
         <section className="movies-section">
             <div className="movies-section-header">
