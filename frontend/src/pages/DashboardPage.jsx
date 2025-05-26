@@ -48,10 +48,6 @@ export default function DashboardPage() {
               <h3>Movies to watch</h3>
               <p>{wishlistMovies.length}</p>
             </div>
-            <div className='dashboard-tile'>
-              <h3>Liked movies</h3>
-              <p>4</p>
-            </div>
           </div>
         </div>
         <MovieListSection

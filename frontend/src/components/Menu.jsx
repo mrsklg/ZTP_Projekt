@@ -1,14 +1,11 @@
 import { NavLink, useNavigate } from "react-router-dom"
 import '../styles/menu.css';
 import { 
-    user, 
-    plus, 
     magnifying_glass, 
-    heart, 
     cog, 
     home  
 } from 'react-icons-kit/ikons';
-import { check, clockO, film, signOut, bars, fa } from 'react-icons-kit/fa/'
+import { check, clockO, signOut, bars } from 'react-icons-kit/fa/'
 import { Icon } from 'react-icons-kit';
 import { useState } from "react";
 
@@ -23,12 +20,8 @@ export default function Menu() {
     };
 
     const menuItems = [
-        { to: "login", icon: user, label: "Login" },
-        { to: "register", icon: plus, label: "Register" },
         { to: "dashboard", icon: home, label: "Dashboard" },
         { to: "browse", icon: magnifying_glass, label: "Browse" },
-        { to: "movie/:id", icon: film, label: "Film Details" },
-        { to: "liked", icon: heart, label: "Liked" },
         { to: "settings", icon: cog, label: "Settings" },
         { to: "to_watch", icon: clockO, label: "To Watch" },
         { to: "watched", icon: check, label: "Watched" }
