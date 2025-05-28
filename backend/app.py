@@ -3,6 +3,7 @@ from flask_cors import CORS
 from datetime import timedelta
 import psycopg2
 from werkzeug.security import generate_password_hash, check_password_hash
+from flasgger import Swagger
 
 def get_db_connection():
     return psycopg2.connect(
@@ -17,6 +18,77 @@ app = Flask(__name__)
 app.secret_key = 'bardzo_tajne_haslo'
 app.permanent_session_lifetime = timedelta(days=7)
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:3001"}}, supports_credentials=True)
+swagger = Swagger(app)
+
+# zmiana hasła
+@app.route('/api/change_pswd', methods=['POST'])
+def change_password():
+    if 'user_id' not in session:
+        return jsonify({"error": "Nieautoryzowany dostęp"}), 401
+
+    user_id = session['user_id']
+    data = request.get_json()
+
+    old_pwd = data.get('old_password')
+    new_pwd = data.get('new_password')
+
+    if not old_pwd or not new_pwd:
+        return jsonify({"error": "Brak wymaganych danych"}), 400
+
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        cur.execute("SELECT password FROM users WHERE id = %s", (user_id,))
+        row = cur.fetchone()
+
+        if not row:
+            return jsonify({"error": "Użytkownik nie istnieje"}), 404
+
+        current_hashed_pwd = row[0]
+
+        if not check_password_hash(current_hashed_pwd, old_pwd):
+            return jsonify({"error": "Nieprawidłowe stare hasło"}), 400
+
+        if check_password_hash(current_hashed_pwd, new_pwd):
+            return jsonify({"error": "Nowe hasło nie może być takie samo jak stare"}), 400
+
+        new_hashed_pwd = generate_password_hash(new_pwd)
+        cur.execute("UPDATE users SET password = %s WHERE id = %s", (new_hashed_pwd, user_id))
+        conn.commit()
+
+        cur.close()
+        conn.close()
+
+        return jsonify({"message": "Hasło zostało zmienione pomyślnie"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+# usuwanie konta    
+@app.route('/api/delete_account', methods=['DELETE'])
+def delete_account():
+    if 'user_id' not in session:
+        return jsonify({"error": "Nieautoryzowany dostęp"}), 401
+
+    user_id = session['user_id']
+
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        cur.execute("DELETE FROM users WHERE id = %s", (user_id,))
+        conn.commit()
+
+        cur.close()
+        conn.close()
+
+        session.clear()
+
+        return jsonify({"message": "Konto zostało usunięte"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500    
 
 # rejestracja
 @app.route('/api/register', methods=['POST'])
@@ -58,6 +130,7 @@ def register():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
+#logowanie    
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -96,7 +169,8 @@ def login():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
+
+# sprawdzanie sesji    
 @app.route('/api/session', methods=['GET'])
 def check_session():
     user_id = session.get('user_id')
@@ -105,11 +179,13 @@ def check_session():
     else:
         return jsonify({"logged_in": False}), 200
     
+#wylogowanie    
 @app.route('/api/logout', methods=['POST'])
 def logout():
     session.pop('user_id', None)
     return jsonify({"message": "Wylogowano"}), 200
 
+# pobieranie danych zalogowanego użytkownika
 @app.route('/api/me', methods=['GET'])
 def get_current_user():
     user_id = session.get('user_id')
@@ -139,6 +215,7 @@ def get_current_user():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+# użytkownicy
 @app.route('/api/users', methods=['GET'])
 def get_users():
     conn = get_db_connection()
@@ -158,6 +235,7 @@ def get_users():
 
     return jsonify(users)
 
+#test bazy
 @app.route('/api/db-check')
 def db_check():
     try:
@@ -170,7 +248,8 @@ def db_check():
         return jsonify({"status": "ok", "version": version})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
-    
+
+# pobieranie listy oglądniętych filmów    
 @app.route('/api/movies/watched', methods=['GET'])
 def get_watched_movies():
     user_id = session.get('user_id')
@@ -190,7 +269,8 @@ def get_watched_movies():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
+
+# usuwanie wybranego filmu z listy oglądniete    
 @app.route('/api/movies/watched/<movie_id>', methods=['DELETE'])
 def remove_from_watched(movie_id):
     user_id = session.get('user_id')
@@ -218,6 +298,7 @@ def remove_from_watched(movie_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+# dodanie filmu do listy oglądnięte
 @app.route('/api/movies/watched/<movie_id>', methods=['POST'])
 def add_to_watched(movie_id):
     user_id = session.get('user_id')
@@ -258,7 +339,7 @@ def add_to_watched(movie_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
+# pobranie listy filmów do oglądnięcia
 @app.route('/api/movies/watchlist', methods=['GET'])
 def get_watchlist_movies():
     user_id = session.get('user_id')
@@ -278,7 +359,8 @@ def get_watchlist_movies():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
+
+# usunięcie wskazanego filmu z listy do oglądnięcia    
 @app.route('/api/movies/watchlist/<movie_id>', methods=['DELETE'])
 def remove_from_watchlist(movie_id):
     user_id = session.get('user_id')
@@ -306,6 +388,7 @@ def remove_from_watchlist(movie_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+# dodanie filmu do listy do oglądnięcia
 @app.route('/api/movies/watchlist/<movie_id>', methods=['POST'])
 def add_to_watchlist(movie_id):
     user_id = session.get('user_id')
@@ -354,7 +437,7 @@ def add_to_watchlist(movie_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
+# pobranie listy ulubionych filmów
 @app.route('/api/movies/likes', methods=['GET'])
 def get_liked_movies():
     user_id = session.get('user_id')
@@ -374,7 +457,8 @@ def get_liked_movies():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
+
+# usunięcie wskazanego filmu z listy ulubionych    
 @app.route('/api/movies/likes/<movie_id>', methods=['DELETE'])
 def remove_from_likes(movie_id):
     user_id = session.get('user_id')
@@ -401,7 +485,8 @@ def remove_from_likes(movie_id):
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
+
+# dodanie filmu do listy ulubionych    
 @app.route('/api/movies/likes/<movie_id>', methods=['POST'])
 def add_to_likes(movie_id):
     user_id = session.get('user_id')
