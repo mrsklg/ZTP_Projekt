@@ -1,12 +1,64 @@
 import { useNavigate } from 'react-router-dom';
 import noPoster from '../assets/No data.svg';
 import '../styles/movie.css'
+import { addToWatchList, removeFromWatchList } from '../api/watchList';
+import { addToWishList, removeFromWishList } from '../api/wishList';
 
-export default function MovieTile({ movie, isDetailsOpened = false }) {
+export default function MovieTile({ movie, isDetailsOpened = false, currentList, opposingList }) {
     const navigate = useNavigate();
 
     const handleMovieClick = () => {
         navigate(`/movie/${movie.imdbID}`);
+    };
+
+    const handleAddWishlist = () => {
+        addToWishList(movie.imdbID);
+    };
+
+    const handleAddWatchlist = () => {
+        addToWatchList(movie.imdbID);
+    };
+
+    const handleRemoveWishlist = () => {
+        removeFromWishList(movie.imdbID);
+    };
+
+    const handleRemoveWatchlist = () => {
+        removeFromWatchList(movie.imdbID);
+    };
+
+    const isInOpposingList = opposingList?.some(m => m.imdbID === movie.imdbID);
+
+    const renderActionButtons = () => {
+        if (currentList === "wishlist") {
+            return (
+                <>
+                    { !isInOpposingList && (
+                        <button className="movie-options-button" onClick={(e) => { e.stopPropagation(); handleAddWatchlist(movie); }}>
+                            Add to Watchlist
+                        </button>
+                    ) }
+                    <button className="movie-options-button" onClick={(e) => { e.stopPropagation(); handleRemoveWishlist(movie); }}>
+                        Remove from Wishlist
+                    </button>
+                </>
+            );
+        }
+        if (currentList === "watchlist") {
+            return (
+                <>
+                    { !isInOpposingList && (
+                        <button className="movie-options-button" onClick={(e) => { e.stopPropagation(); handleAddWishlist(movie); }}>
+                            Add to Wishlist
+                        </button>
+                    ) }
+                    <button className="movie-options-button" onClick={(e) => { e.stopPropagation(); handleRemoveWatchlist(movie); }}>
+                        Remove from Watchlist
+                    </button>
+                </>
+            );
+        }
+        return null;
     };
 
     return (
@@ -20,6 +72,9 @@ export default function MovieTile({ movie, isDetailsOpened = false }) {
                     <p>{movie.Type}</p>
                     <div className="genre" >
                         <p>{movie.Genre}</p>
+                    </div>
+                    <div className='movie-actions'>
+                        {renderActionButtons()}
                     </div>
                 </div>
             </div>

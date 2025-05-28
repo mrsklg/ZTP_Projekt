@@ -34,3 +34,25 @@ body {
     align-items: center;
 }
 
+.movie-options-button {
+    background-color: var(--cambridge-blue);
+    color: black;
+    border: none;
+    padding: 10px 1em;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
+    text-align: center;
+}
+
+.movie-options-button:hover {
+    background-color: var(--cambridge-blue-2);
+    transform: translateY(-2px);
+}
+
+.movie-options-button:active {
+    background-color: var(--cambridge-blue-2);
+    transform: translateY(1px);
+}

@@ -1,20 +1,21 @@
-.search-container{
+.search-container {
     width: 80%;
+    flex: auto;
 }
 
-.search-container .search-results{
+.search-container .search-results {
     background-color: unset;
 }
 
-.search-container .movie-result{
+.search-container .movie-result {
     margin-left: 0;
     margin-right: 0;
 }
 
-.search-container h2{
+.search-container h2 {
     margin-left: 0;
 }
 
-.search-bar{
+.search-bar {
     position: unset;
 }

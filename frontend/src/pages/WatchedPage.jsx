@@ -1,37 +1,30 @@
 import { useEffect, useState } from 'react';
 import MovieListSection from "../components/MovieListSection";
-import { getWatchList } from '../api/watchList';
-import { getMovie } from '../api/movies';
-
+import { fetchMoviesFromLists } from '../api/fetchLists';
 
 export default function WatchedPage() {
-  const [movies, setMovies] = useState([]);
+  const [wishlistMovies, setWishlistMovies] = useState([]);
+  const [watchlistMovies, setWatchlistMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchWatchedMovies = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await getWatchList();
-        const data = await response.json();
+        
+        const { wishlistMovies, watchlistMovies } = await fetchMoviesFromLists();
 
-        // Zakładamy, że data to tablica ID np. ["tt1234567", "tt9876543"]
-        if (!Array.isArray(data)) {
-          throw new Error("Nieprawidłowy format danych z listy obejrzanych.");
-        }
-
-        const moviePromises = data.map((id) => getMovie(id));
-        const moviesData = await Promise.all(moviePromises);
-        setMovies(moviesData);
+        setWishlistMovies(wishlistMovies);
+        setWatchlistMovies(watchlistMovies);
       } catch (err) {
-        setError(err.message || "Błąd podczas ładowania obejrzanych filmów.");
+        setError(err.message || "Błąd podczas ładowania danych.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchWatchedMovies();
+    fetchData();
   }, []);
 
   return (
@@ -40,7 +33,9 @@ export default function WatchedPage() {
       {error && <p className="error">{error}</p>}
       <MovieListSection
               title="Watched movies"
-              movies={movies}>
+              movies={watchlistMovies}
+              opposingList={wishlistMovies}
+        >
       </MovieListSection>
     </>
   );
