@@ -6,7 +6,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import DashboardPage from './pages/DashboardPage';
 import BrowsePage from './pages/BrowsePage';
 import FilmDetailsPage from './pages/FilmDetailsPage';
-import LikedPage from './pages/LikedPage';
 import SettingsPage from './pages/SettingsPage';
 import ToWatchPage from './pages/ToWatchPage';
 import WatchedPage from './pages/WatchedPage';
@@ -29,7 +28,6 @@ function App() {
             <Route path='dashboard' element={<DashboardPage/>} />|
             <Route path='browse' element={<BrowsePage/>} />|
             <Route path="/movie/:id" element={<FilmDetailsPage />} />
-            <Route path='liked' element={<LikedPage/>} />|
             <Route path='settings' element={<SettingsPage/>} />|
             <Route path='to_watch' element={<ToWatchPage/>} />|
             <Route path='watched' element={<WatchedPage/>} />|

@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import MovieTile from "./MovieTile";
 import "../styles/movie.css"
 
-export default function MovieListSection({ title, movies, maxItems = null, seeMoreLink = null, opposingList }) {
+export default function MovieListSection({ title, movies, maxItems = null, seeMoreLink = null, opposingList, additionalClass }) {
     const displayedMovies = maxItems ? movies.slice(0, maxItems) : movies;
     const navigate = useNavigate();
 
@@ -14,7 +14,7 @@ export default function MovieListSection({ title, movies, maxItems = null, seeMo
 
     return (
         <section className="movies-section">
-            <div className="movies-section-header">
+            <div className={`movies-section-header ${additionalClass}`}>
                 <h2>{title}</h2>
                 {seeMoreLink && <button className="show-more" onClick={handleSeeMoreClick}>
                     See more

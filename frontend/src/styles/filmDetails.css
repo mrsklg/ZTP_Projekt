@@ -26,3 +26,23 @@
 .movie-tile-details .movie-info p{
     font-size: 1.5rem;
 }
+
+@media (max-width: 480px) {
+    .movie-tile-details img {
+        min-width: 4rem;
+    }
+
+    .movie-tile-details .movie-info h3 {
+        font-size: 1.5rem;
+        margin: 0;
+    }
+    
+    .movie-tile-details .movie-info p {
+        font-size: 1.25rem;
+        margin-bottom: 0.1rem;
+    }
+
+    .movie-tile-details .movie-info .genre p {
+        font-size: 1rem;
+    }
+}

@@ -56,3 +56,9 @@ body {
     background-color: var(--cambridge-blue-2);
     transform: translateY(1px);
 }
+
+@media (max-width: 768px) {
+    .content-container {
+        width: -webkit-fill-available;
+    }
+}

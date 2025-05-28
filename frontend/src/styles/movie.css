@@ -82,15 +82,20 @@
 }
 
 .movie-details {
-  margin-top: 16px;
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+  justify-items: center;
+  align-items: baseline;
 }
 
 .movie-details p {
-  margin: 4px 0;
+  margin: 0.25rem 0;
 }
 
 .ratings ul {
-  padding-left: 16px;
+  padding-left: 1rem;
   margin: 0;
 }
 
@@ -112,16 +117,34 @@
     width: 100%;
 }
 
+.movie-details-part {
+    width: 100%;
+    border: 2px solid var(--cambridge-blue-2);
+    border-radius: 1rem;
+    padding: 0.5rem;
+}
+
 @media (max-width: 768px) {
     .show-more{
         margin: 1rem 0;
     }
 
+    .movies-section {
+        width: 100%;
+        padding: 0 1rem;
+    }
+
     .movie-grid {
-        grid-template-columns: repeat(auto-fit, minmax(100%, 25rem));
+        grid-template-columns: 95%;
     }
 
     .movies-section-header {
-        margin: 0 1rem;
+        margin: 0 3rem;
+        padding-right: 2rem;
+    }
+
+    .movie-info {
+        padding: 0 0 0 2rem;
     }
 }
+

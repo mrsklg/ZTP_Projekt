@@ -68,3 +68,16 @@
     font-size: 0.8rem;
     color: var(--cambridge-blue);
 }
+
+@media (max-width: 768px) {
+    .settings-container {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 1rem;
+    }
+
+    .settings-tile {
+        width: 80%;
+    }
+}

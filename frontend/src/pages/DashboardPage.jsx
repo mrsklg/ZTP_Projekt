@@ -48,10 +48,6 @@ export default function DashboardPage() {
               <h3>Movies to watch</h3>
               <p>{wishlistMovies.length}</p>
             </div>
-            <div className='dashboard-tile'>
-              <h3>Liked movies</h3>
-              <p>4</p>
-            </div>
           </div>
         </div>
         <MovieListSection
@@ -60,13 +56,15 @@ export default function DashboardPage() {
               maxItems={3}
               seeMoreLink="/watched"
               opposingList={wishlistMovies}
-        />
+              additionalClass={'movies-section-header-dashboard'}
+              />
         <MovieListSection
               title="To watch list"
               movies={wishlistMovies}
               maxItems={3}
               seeMoreLink="/to_watch"
               opposingList={watchlistMovies}
+              additionalClass={'movies-section-header-dashboard'}
         />
     </>
   );

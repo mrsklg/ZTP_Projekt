@@ -26,8 +26,8 @@
     flex-direction: column;
     background-color: var(--ash-gray);
     border-radius: 16px;
-    padding: 30px;
-    width: 320px;
+    padding: 2rem;
+    width: 25rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
@@ -44,17 +44,18 @@ form {
     flex-direction: column;
 }
 
-.full-name{
+.full-name {
     width: 100%;
     display: flex;
     gap: 10px;
 }
 
-.input-icon-wrapper{
+.input-icon-wrapper {
     position: relative;
     display: flex;
     align-items: center;
 }
+
 .input-icon-wrapper input {
     padding: 8px 8px 8px 36px;
     border-radius: 6px;
@@ -66,13 +67,22 @@ form {
     position: absolute;
     left: 10px;
     color: #999;
-    pointer-events: none; /* pozwala kliknąć input pod ikoną */
+    pointer-events: none;
+    /* pozwala kliknąć input pod ikoną */
 }
 
 .login-page input {
-    border-radius: 6px;
+    border-radius: 10px;
     border: 1px solid #ccc;
     margin-top: 5px;
+    padding: 1rem 2rem;
+    font-size: 0.9rem
+}
+
+.login-page input:focus {
+    outline: none;
+    border: 3px solid var(--cambridge-blue);
+    box-shadow:  0 0 5px var(--cambridge-blue);
 }
 
 .login-page button {
@@ -90,8 +100,8 @@ button:hover {
     background-color: var(--cambridge-blue);
 }
 
-.form-bottom a{
-    color: var(--cambridge-blue)
+.form-bottom a {
+    color: var(--cambridge-blue-2)
 }
 
 @media (max-width: 768px) {
@@ -101,12 +111,13 @@ button:hover {
 
     .login-page {
         width: 100vw;
-        padding: 20px;
+        display: flex;
+        align-items: center;
     }
 
     .form-container {
-        width: 100%;
+        margin: 2rem 0;
+        width: 90%;
         max-width: 100%;
-        padding: 20px;
     }
 }
