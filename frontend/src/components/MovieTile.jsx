@@ -58,6 +58,18 @@ export default function MovieTile({ movie, isDetailsOpened = false, currentList,
                 </>
             );
         }
+        if (currentList === null || opposingList === null) {
+            return (
+                <>
+                    <button className="movie-options-button" onClick={(e) => { e.stopPropagation(); handleAddWishlist(movie); }}>
+                        Add to Wishlist
+                    </button>
+                    <button className="movie-options-button" onClick={(e) => { e.stopPropagation(); handleAddWatchlist(movie); }}>
+                        Add to watchlist
+                    </button>
+                </>
+            );
+        }
         return null;
     };
 
