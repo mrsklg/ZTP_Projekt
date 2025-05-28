@@ -92,14 +92,14 @@ export default function MovieTile({ movie, isDetailsOpened = false, currentList,
             </div>
             {isDetailsOpened && (
                 <div className="movie-details">
-                    <p><strong>Plot:</strong> {movie.Plot}</p>
-                    <p><strong>Director:</strong> {movie.Director}</p>
-                    <p><strong>Actors:</strong> {movie.Actors}</p>
-                    <p><strong>Language:</strong> {movie.Language}</p>
-                    <p><strong>Country:</strong> {movie.Country}</p>
-                    <p><strong>Box Office:</strong> {movie.BoxOffice}</p>
-                    <p><strong>IMDb Rating:</strong> ⭐ {movie.imdbRating}</p>
-                    <div className="ratings">
+                    <p className='movie-details-part'><strong>Plot:</strong> {movie.Plot}</p>
+                    <p className='movie-details-part'><strong>Director:</strong> {movie.Director}</p>
+                    <p className='movie-details-part'><strong>Actors:</strong> {movie.Actors}</p>
+                    <p className='movie-details-part'><strong>Language:</strong> {movie.Language}</p>
+                    <p className='movie-details-part'><strong>Country:</strong> {movie.Country}</p>
+                    <p className='movie-details-part'><strong>Box Office:</strong> {movie.BoxOffice}</p>
+                    <p className='movie-details-part'><strong>IMDb Rating:</strong> ⭐ {movie.imdbRating}</p>
+                    <div className="ratings movie-details-part">
                         <strong>Ratings:</strong>
                         <ul>
                             {movie.Ratings?.map((r, index) => (

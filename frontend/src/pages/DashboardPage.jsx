@@ -56,13 +56,15 @@ export default function DashboardPage() {
               maxItems={3}
               seeMoreLink="/watched"
               opposingList={wishlistMovies}
-        />
+              additionalClass={'movies-section-header-dashboard'}
+              />
         <MovieListSection
               title="To watch list"
               movies={wishlistMovies}
               maxItems={3}
               seeMoreLink="/to_watch"
               opposingList={watchlistMovies}
+              additionalClass={'movies-section-header-dashboard'}
         />
     </>
   );

@@ -58,5 +58,29 @@
 
     .limited-search-container{
         width: 100%;
+        padding-left: 2rem;
+    }
+
+    .search-bar {
+        margin-top: 0;
     }
 }
+
+@media (max-width: 768px) {
+    .limited-search-container {
+        padding-left: 1rem;
+    }
+
+    .search-results {
+        width: 95%;
+    }
+
+    .search-bar input {
+        width: 80%;
+    }
+
+    .movies-section-header-dashboard {
+        margin: 0 1rem;
+    }
+}
+
