@@ -20,8 +20,8 @@ CREATE TABLE likes (
     UNIQUE(user_id, movie_id)
 );
 
--- Tabela: Watchlist (filmy do obejrzenia)
-CREATE TABLE watchlist (
+-- Tabela: Wishlist (filmy do obejrzenia)
+CREATE TABLE wishlist (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     movie_id UUID NOT NULL,
@@ -29,8 +29,8 @@ CREATE TABLE watchlist (
     UNIQUE(user_id, movie_id)
 );
 
--- Tabela: Watched (filmy obejrzane)
-CREATE TABLE watched (
+-- Tabela: Watchlist (filmy obejrzane)
+CREATE TABLE watchlist (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     movie_id UUID NOT NULL,
