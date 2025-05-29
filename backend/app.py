@@ -17,7 +17,7 @@ def get_db_connection():
 app = Flask(__name__)
 app.secret_key = 'bardzo_tajne_haslo'
 app.permanent_session_lifetime = timedelta(days=7)
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:3001"}}, supports_credentials=True)
+CORS(app, resources={r"/api/*": {"origins": ["http://localhost:3001", "http://127.0.0.1:3001"]}}, supports_credentials=True)
 
 swagger = Swagger(app)  #http://localhost:5000/apidocs/
 
