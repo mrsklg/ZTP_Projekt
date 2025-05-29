@@ -43,10 +43,9 @@ export async function getWatchList() {
         },
         credentials: "include"
     })
-    
+    return response;
     //symulacja
-    // const dummyMovieIDs = ["tt0133093", "tt0111161", "tt1375666", "tt0120338", "tt0133093", "tt0111161", "tt1375666", "tt0120338", "tt0133093", "tt0111161", "tt1375666", "tt0120338"]; // np. Matrix, Shawshank, Inception
-
+    // const dummyMovieIDs = {"watchlist":[]}
 
     // return new Response(JSON.stringify(dummyMovieIDs), {
     //     status: 200,
@@ -55,6 +54,4 @@ export async function getWatchList() {
     //     }
     // });
 
-
-    return response;
 }

@@ -45,7 +45,7 @@ export async function getWishList(){
     return response;
 
     //symulacja
-    // const dummyMovieIDs = ["tt1781769", "tt0133093", "tt0111161", "tt1375666", "tt0120338", "tt0133093", "tt0111161", "tt1375666", "tt0120338", "tt0133093", "tt0111161", "tt1375666", "tt0120338"]; // np. Matrix, Shawshank, Inception
+    // const dummyMovieIDs = {"wishlist":["tt0120338","tt0133093", "tt0111161", "tt1375666", "tt0120338"]}
 
 
     // return new Response(JSON.stringify(dummyMovieIDs), {

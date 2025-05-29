@@ -53,7 +53,6 @@ export default function WatchedPage() {
 
   return (
     <>
-      {loading && <p>Loading...</p>}
       {error && <p className="error">{error}</p>}
       <MovieListSection
               title="Watched movies"
@@ -63,6 +62,7 @@ export default function WatchedPage() {
               onRemoveFromWatchlist={handleRemoveFromWatchlist}
               onAddToWishlist={handleAddToWishlist}
               onRemoveFromWishlist={handleRemoveFromWishlist}
+              isLoading={loading}
         >
       </MovieListSection>
     </>
