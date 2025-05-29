@@ -1557,7 +1557,7 @@ def add_to_watchlist():
         cur.close()
         conn.close()
         
-        # remove_from_wishlist(movie_id)
+        remove_from_wishlist_internal(user_id, movie_id)
 
         return jsonify({
             "id": str(new_entry[0]),
@@ -1569,6 +1569,25 @@ def add_to_watchlist():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+def remove_from_wishlist_internal(user_id, movie_id):
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        cur.execute(
+            "DELETE FROM wishlist WHERE user_id = %s AND movie_id = %s RETURNING id",
+            (user_id, movie_id)
+        )
+        deleted = cur.fetchone()
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        return deleted is not None
+
+    except Exception as e:
+        print(f"Błąd usuwania z wishlisty: {e}")
+        return False
 
 
 if __name__ == '__main__':

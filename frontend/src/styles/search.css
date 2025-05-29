@@ -169,6 +169,16 @@
     display: flex;
     width: 75%;
 }
+
+.info {
+    background-color: var(--coral-pink);
+    cursor: default;
+}
+
+.info:hover {
+    background-color: var(--coral-pink);
+}
+
 @media (max-width: 768px) {
     .movie-result{
         flex-direction: column;

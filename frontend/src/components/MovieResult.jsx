@@ -3,15 +3,33 @@ import { useNavigate } from 'react-router-dom';
 import noPoster from '../assets/No data.svg';
 import { addToWishList } from '../api/wishList';
 import { addToWatchList } from '../api/watchList';
+import { fetchMoviesFromLists } from '../api/fetchLists';
+import { useState, useEffect } from 'react';
 
 export default function MovieResult({ movie, showLimit }) {
     const navigate = useNavigate();
+    const [wishlistMovies, setWishlistMovies] = useState([]);
+    const [watchlistMovies, setWatchlistMovies] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const { wishlistMovies, watchlistMovies } = await fetchMoviesFromLists();
+
+            setWishlistMovies(wishlistMovies);
+            setWatchlistMovies(watchlistMovies);
+
+            console.log(wishlistMovies)
+        };
+    
+        fetchData();
+      }, []);
 
     const handleMovieClick = () => {
         navigate(`/movie/${movie.imdbID}`);
     };
 
     const handleAddWishlist = () => {
+        console.log(wishlistMovies);
         addToWishList(movie.imdbID);
     };
 
@@ -38,16 +56,41 @@ export default function MovieResult({ movie, showLimit }) {
             </div>
             {!showLimit &&
                 <div className='movie-options'>
-                    <button className='movie-options-button'
+                    {!watchlistMovies?.some(m => m.imdbID === movie.imdbID) && !wishlistMovies?.some(m => m.imdbID === movie.imdbID) && (
+                    <>
+                        <button className='movie-options-button'
                         onClick={(e) => {
                             e.stopPropagation();
                             handleAddWishlist();
-                        }}>Add to favorites/wishlist</button>
-                    <button className='movie-options-button'
+                        }}>
+                        Add to favorites/wishlist
+                        </button>
+                        <button className='movie-options-button'
                         onClick={(e) => {
                             e.stopPropagation();
-                            handleAddWatchlist()
-                        }}>Add to watchlist</button>
+                            handleAddWatchlist();
+                        }}>
+                        Add to watchlist
+                        </button>
+                    </>
+                    )}
+
+                    {!watchlistMovies?.some(m => m.imdbID === movie.imdbID) && wishlistMovies?.some(m => m.imdbID === movie.imdbID) && (
+                    <button className='movie-options-button'
+                        onClick={(e) => {
+                        e.stopPropagation();
+                        handleAddWatchlist();
+                        }}>
+                        Add to watchlist
+                    </button>
+                    )}
+
+                    {watchlistMovies?.some(m => m.imdbID === movie.imdbID) && !wishlistMovies?.some(m => m.imdbID === movie.imdbID) && (
+                     <div className='movie-options-button info'>
+                     Already in watchlist
+                    </div>
+                    )}
+
                 </div>
             }
 
@@ -56,3 +99,4 @@ export default function MovieResult({ movie, showLimit }) {
     )
 
 }
+
