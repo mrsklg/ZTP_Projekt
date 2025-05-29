@@ -1557,7 +1557,7 @@ def add_to_watchlist():
         cur.close()
         conn.close()
         
-        remove_from_wishlist(movie_id)
+        # remove_from_wishlist(movie_id)
 
         return jsonify({
             "id": str(new_entry[0]),

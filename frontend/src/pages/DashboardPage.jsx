@@ -20,6 +20,9 @@ export default function DashboardPage() {
 
         setWishlistMovies(wishlistMovies);
         setWatchlistMovies(watchlistMovies);
+
+        console.log(`wishlist w dashboard: ${wishlistMovies}`)
+        console.log(`watchlist w dashboard: ${watchlistMovies}`)
       } catch (err) {
         setError(err.message || "Błąd podczas ładowania danych.");
       } finally {
