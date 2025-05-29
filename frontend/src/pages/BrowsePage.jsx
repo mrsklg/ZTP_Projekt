@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import MovieSearch from "../components/MovieSearch";
 import '../styles/browse.css'
 

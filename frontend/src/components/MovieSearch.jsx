@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import SearchBar from './SearchBar';
 import MovieResult from './MovieResult';
 import { fetchMovies } from '../api/movies';

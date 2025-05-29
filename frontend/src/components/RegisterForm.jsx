@@ -4,7 +4,7 @@ import {user} from 'react-icons-kit/fa/user';
 import {lock} from 'react-icons-kit/ikons/lock';
 import {mail} from 'react-icons-kit/ikons/mail'
 import { Icon } from 'react-icons-kit';
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 export default function RegisterForm() {
     const [email, setEmail] = useState("")

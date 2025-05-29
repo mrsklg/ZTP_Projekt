@@ -2,7 +2,7 @@ import './styles/global.css'
 import React from 'react';
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from './pages/RegisterPage';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router';
 import DashboardPage from './pages/DashboardPage';
 import BrowsePage from './pages/BrowsePage';
 import FilmDetailsPage from './pages/FilmDetailsPage';
@@ -17,6 +17,7 @@ function App() {
   return (
     <Router>
       <div className='app-container'>
+        <a>Learn React</a>
         <Routes>
           
           <Route element={<LayoutNotLogged />}>

@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router"
 import '../styles/menu.css';
 import { 
     magnifying_glass, 

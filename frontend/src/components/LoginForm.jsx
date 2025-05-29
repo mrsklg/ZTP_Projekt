@@ -3,7 +3,7 @@ import { loginUser } from "../api/auth";
 import { mail } from 'react-icons-kit/ikons/mail'
 import { lock } from 'react-icons-kit/ikons/lock';
 import { Icon } from 'react-icons-kit';
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 export default function LoginForm() {
     const [email, setEmail] = useState("")
