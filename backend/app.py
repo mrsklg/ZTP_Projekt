@@ -416,6 +416,7 @@ def login():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 # sprawdzanie sesji    
 @app.route('/api/session', methods=['GET'])
 def check_session():
@@ -680,6 +681,7 @@ def get_users():
 
     return jsonify(users)
 
+
 #test bazy
 @app.route('/api/db-check')
 def db_check():
@@ -791,6 +793,555 @@ def get_watchlist():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
+# pobranie listy filmów do oglądnięcia
+@app.route('/api/wishlist', methods=['GET'])
+def get_wishlist():
+    """
+    Pobierz listę filmów z wishlisty użytkownika
+    ---
+    tags:
+      - Filmy
+    responses:
+      200:
+        description: Lista filmów z wishlisty użytkownika
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                wishlist:
+                  type: array
+                  items:
+                    type: string
+                  example: ["123", "456", "789"]
+      401:
+        description: Użytkownik niezalogowany
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: "Nie jesteś zalogowany"
+      500:
+        description: Błąd serwera
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: "Błąd serwera"
+    """
+    
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({"error": "Nie jesteś zalogowany"}), 401
+    
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT movie_id FROM wishlist WHERE user_id = %s", (user_id,))
+        rows = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        movie_ids = [str(row[0]) for row in rows]
+        return jsonify({"wishlist": movie_ids}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# dodanie filmu do listy do oglądnięcia
+@app.route('/api/wishlist', methods=['POST'])
+def add_to_wishlist():
+    """
+    Dodaj film do wishlisty użytkownika
+    ---
+    tags:
+      - Filmy
+    parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            imdbID:
+              type: string
+              example: "tt1234567"
+          required:
+            - imdbID
+    responses:
+      201:
+        description: Film został dodany do wishlisty
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: "123"
+                movie_id:
+                  type: string
+                  example: "456"
+                user_id:
+                  type: string
+                  example: "789"
+                added_at:
+                  type: string
+                  format: date-time
+                  example: "2025-05-28T12:34:56.789Z"
+      400:
+        description: Nieprawidłowe żądanie
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: object
+                  properties:
+                    error:
+                      type: string
+                      example: "Film jest już na wishliście"
+                - type: object
+                  properties:
+                    error:
+                      type: string
+                      example: "Brak wymaganego pola imdbID"
+      401:
+        description: Użytkownik niezalogowany
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: "Nie jesteś zalogowany"
+      500:
+        description: Błąd serwera
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: "Błąd serwera"
+    """
+    
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({"error": "Nie jesteś zalogowany"}), 401
+
+    try:
+        data = request.get_json()
+        movie_id = data.get('imdbID')
+        
+        if not movie_id:
+            return jsonify({"error": "Brak wymaganego pola imdbID"}), 400
+        
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        cur.execute(
+            "SELECT id FROM wishlist WHERE user_id = %s AND movie_id = %s",
+            (user_id, movie_id)
+        )
+        if cur.fetchone():
+            cur.close()
+            conn.close()
+            return jsonify({"error": "Film jest już na wishliście"}), 400
+
+        cur.execute(
+            "SELECT id FROM watchlist WHERE user_id = %s AND movie_id = %s",
+            (user_id, movie_id)
+        )
+        if cur.fetchone():
+            cur.close()
+            conn.close()
+            return jsonify({"error": "Film jest już oznaczony jako obejrzany"}), 400
+
+        # Dodanie do wishlisty
+        cur.execute(
+            "INSERT INTO wishlist (user_id, movie_id) VALUES (%s, %s) RETURNING id, added_at",
+            (user_id, movie_id)
+        )
+        new_entry = cur.fetchone()
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        return jsonify({
+            "id": str(new_entry[0]),
+            "movie_id": movie_id,
+            "user_id": user_id,
+            "added_at": new_entry[1].isoformat()
+        }), 201
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# pobranie listy ulubionych filmów
+@app.route('/api/movies/likes', methods=['GET'])
+def get_liked_movies():
+    """
+    Pobierz listę filmów polubionych przez zalogowanego użytkownika
+    ---
+    tags:
+      - Filmy
+    responses:
+      200:
+        description: Lista ID filmów polubionych przez użytkownika
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                likes:
+                  type: array
+                  items:
+                    type: string
+                  example: ["123", "456", "789"]
+      401:
+        description: Użytkownik niezalogowany
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: "Nie jesteś zalogowany"
+      500:
+        description: Błąd serwera
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: "Błąd serwera"
+    """
+
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({"error": "Nie jesteś zalogowany"}), 401
+    
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT movie_id FROM likes WHERE user_id = %s", (user_id,))
+        rows = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        movie_ids = [str(row[0]) for row in rows]
+        return jsonify({"likes": movie_ids}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# usunięcie wskazanego filmu z listy ulubionych    
+@app.route('/api/movies/likes/<movie_id>', methods=['DELETE'])
+def remove_from_likes(movie_id):
+    """
+    Usuń film z polubionych użytkownika
+    ---
+    tags:
+      - Filmy
+    parameters:
+      - name: movie_id
+        in: path
+        type: string
+        required: true
+        description: ID filmu do usunięcia z polubionych
+    responses:
+      200:
+        description: Film został usunięty z polubionych
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "Film usunięty z likes"
+      401:
+        description: Użytkownik niezalogowany
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: "Nie jesteś zalogowany"
+      404:
+        description: Film nie znaleziony w polubionych
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: "Film nie znaleziony w likes"
+      500:
+        description: Błąd serwera
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: "Błąd serwera"
+    """
+    
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({"error": "Nie jesteś zalogowany"}), 401
+
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        cur.execute(
+            "DELETE FROM likes WHERE user_id = %s AND movie_id = %s RETURNING id",
+            (user_id, movie_id)
+        )
+        deleted = cur.fetchone()
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        if deleted:
+            return jsonify({"message": "Film usunięty z likes"}), 200
+        else:
+            return jsonify({"error": "Film nie znaleziony w likes"}), 404
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# dodanie filmu do listy ulubionych    
+@app.route('/api/movies/likes/<movie_id>', methods=['POST'])
+def add_to_likes(movie_id):
+    """
+    Dodaj film do polubionych użytkownika
+    ---
+    tags:
+      - Filmy
+    parameters:
+      - name: movie_id
+        in: path
+        type: string
+        required: true
+        description: ID filmu do dodania do polubionych
+    responses:
+      201:
+        description: Film został dodany do polubionych
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: "123"
+                movie_id:
+                  type: string
+                  example: "456"
+                user_id:
+                  type: string
+                  example: "789"
+                created_at:
+                  type: string
+                  format: date-time
+                  example: "2025-05-28T12:34:56.789Z"
+      400:
+        description: Film jest już w polubionych
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: "Film jest już w likes"
+      401:
+        description: Użytkownik niezalogowany
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: "Nie jesteś zalogowany"
+      500:
+        description: Błąd serwera
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: "Błąd serwera"
+    """
+    
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({"error": "Nie jesteś zalogowany"}), 401
+
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        # Sprawdź czy już jest taki rekord (unikalność)
+        cur.execute(
+            "SELECT id FROM likes WHERE user_id = %s AND movie_id = %s",
+            (user_id, movie_id)
+        )
+        if cur.fetchone():
+            cur.close()
+            conn.close()
+            return jsonify({"error": "Film jest już w likes"}), 400
+
+        cur.execute(
+            "INSERT INTO likes (user_id, movie_id) VALUES (%s, %s) RETURNING id, created_at",
+            (user_id, movie_id)
+        )
+        new_entry = cur.fetchone()
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        return jsonify({
+            "id": str(new_entry[0]),
+            "movie_id": movie_id,
+            "user_id": user_id,
+            "created_at": new_entry[1].isoformat()
+        }), 201
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# usunięcie wskazanego filmu z listy do oglądnięcia    
+@app.route('/api/wishlist', methods=['DELETE'])
+def remove_from_wishlist():
+    """
+    Usuń film z wishlisty użytkownika
+    ---
+    tags:
+      - Filmy
+    parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            imdbID:
+              type: string
+              example: "tt1234567"
+          required:
+            - imdbID
+    responses:
+      200:
+        description: Film został usunięty z wishlisty
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "Film usunięty z wishlisty"
+      400:
+        description: Nieprawidłowe żądanie
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: "Brak wymaganego pola imdbID"
+      401:
+        description: Użytkownik niezalogowany
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: "Nie jesteś zalogowany"
+      404:
+        description: Film nie znaleziony na wishliście
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: "Film nie znaleziony na wishliście"
+      500:
+        description: Błąd serwera
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: "Błąd serwera"
+    """
+    
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({"error": "Nie jesteś zalogowany"}), 401
+
+    try:
+        data = request.get_json()
+        movie_id = data.get('imdbID')
+        
+        if not movie_id:
+            return jsonify({"error": "Brak wymaganego pola imdbID"}), 400
+        
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        cur.execute(
+            "DELETE FROM wishlist WHERE user_id = %s AND movie_id = %s RETURNING id",
+            (user_id, movie_id)
+        )
+        deleted = cur.fetchone()
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        if deleted:
+            return jsonify({"message": "Film usunięty z wishlisty"}), 200
+        else:
+            return jsonify({"error": "Film nie znaleziony w wishliście"}), 404
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 # usuwanie wybranego filmu z listy oglądniete    
 @app.route('/api/watchlist', methods=['DELETE'])
 def remove_from_watchlist():
@@ -828,10 +1379,10 @@ def remove_from_watchlist():
           application/json:
             schema:
               type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Brak wymaganego pola imdbID"
+              properties:
+                error:
+                  type: string
+                  example: "Brak wymaganego pola imdbID"
       401:
         description: Użytkownik niezalogowany
         content:
@@ -1013,549 +1564,6 @@ def add_to_watchlist():
             "movie_id": movie_id,
             "user_id": user_id,
             "watched_at": new_entry[1].isoformat()
-        }), 201
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-# pobranie listy filmów do oglądnięcia
-@app.route('/api/wishlist', methods=['GET'])
-def get_wishlist():
-    """
-    Pobierz listę filmów z wishlisty użytkownika
-    ---
-    tags:
-      - Filmy
-    responses:
-      200:
-        description: Lista filmów z wishlisty użytkownika
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                wishlist:
-                  type: array
-                  items:
-                    type: string
-                  example: ["123", "456", "789"]
-      401:
-        description: Użytkownik niezalogowany
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                  example: "Nie jesteś zalogowany"
-      500:
-        description: Błąd serwera
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                  example: "Błąd serwera"
-    """
-    
-    user_id = session.get('user_id')
-    if not user_id:
-        return jsonify({"error": "Nie jesteś zalogowany"}), 401
-    
-    try:
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute("SELECT movie_id FROM wishlist WHERE user_id = %s", (user_id,))
-        rows = cur.fetchall()
-        cur.close()
-        conn.close()
-
-        movie_ids = [str(row[0]) for row in rows]
-        return jsonify({"wishlist": movie_ids}), 200
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-# usunięcie wskazanego filmu z listy do oglądnięcia    
-@app.route('/api/wishlist', methods=['DELETE'])
-def remove_from_wishlist():
-    """
-    Usuń film z wishlisty użytkownika
-    ---
-    tags:
-      - Filmy
-    parameters:
-      - name: body
-        in: body
-        required: true
-        schema:
-          type: object
-          properties:
-            imdbID:
-              type: string
-              example: "tt1234567"
-          required:
-            - imdbID
-    responses:
-      200:
-        description: Film został usunięty z wishlisty
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-                  example: "Film usunięty z wishlisty"
-      400:
-        description: Nieprawidłowe żądanie
-        content:
-          application/json:
-            schema:
-              type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Brak wymaganego pola imdbID"
-      401:
-        description: Użytkownik niezalogowany
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                  example: "Nie jesteś zalogowany"
-      404:
-        description: Film nie znaleziony na wishliście
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                  example: "Film nie znaleziony na wishliście"
-      500:
-        description: Błąd serwera
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                  example: "Błąd serwera"
-    """
-    
-    user_id = session.get('user_id')
-    if not user_id:
-        return jsonify({"error": "Nie jesteś zalogowany"}), 401
-
-    try:
-        data = request.get_json()
-        movie_id = data.get('imdbID')
-        
-        if not movie_id:
-            return jsonify({"error": "Brak wymaganego pola imdbID"}), 400
-        
-        conn = get_db_connection()
-        cur = conn.cursor()
-
-        cur.execute(
-            "DELETE FROM wishlist WHERE user_id = %s AND movie_id = %s RETURNING id",
-            (user_id, movie_id)
-        )
-        deleted = cur.fetchone()
-        conn.commit()
-        cur.close()
-        conn.close()
-
-        if deleted:
-            return jsonify({"message": "Film usunięty z wishlisty"}), 200
-        else:
-            return jsonify({"error": "Film nie znaleziony w wishliście"}), 404
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-# dodanie filmu do listy do oglądnięcia
-@app.route('/api/wishlist', methods=['POST'])
-def add_to_wishlist():
-    """
-    Dodaj film do wishlisty użytkownika
-    ---
-    tags:
-      - Filmy
-    parameters:
-      - name: body
-        in: body
-        required: true
-        schema:
-          type: object
-          properties:
-            imdbID:
-              type: string
-              example: "tt1234567"
-          required:
-            - imdbID
-    responses:
-      201:
-        description: Film został dodany do wishlisty
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                  example: "123"
-                movie_id:
-                  type: string
-                  example: "456"
-                user_id:
-                  type: string
-                  example: "789"
-                added_at:
-                  type: string
-                  format: date-time
-                  example: "2025-05-28T12:34:56.789Z"
-      400:
-        description: Nieprawidłowe żądanie
-        content:
-          application/json:
-            schema:
-              oneOf:
-                - type: object
-                  properties:
-                    error:
-                      type: string
-                      example: "Film jest już na wishliście"
-                - type: object
-                  properties:
-                    error:
-                      type: string
-                      example: "Brak wymaganego pola imdbID"
-      401:
-        description: Użytkownik niezalogowany
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                  example: "Nie jesteś zalogowany"
-      500:
-        description: Błąd serwera
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                  example: "Błąd serwera"
-    """
-    
-    user_id = session.get('user_id')
-    if not user_id:
-        return jsonify({"error": "Nie jesteś zalogowany"}), 401
-
-    try:
-        data = request.get_json()
-        movie_id = data.get('imdbID')
-        
-        if not movie_id:
-            return jsonify({"error": "Brak wymaganego pola imdbID"}), 400
-        
-        conn = get_db_connection()
-        cur = conn.cursor()
-
-        cur.execute(
-            "SELECT id FROM wishlist WHERE user_id = %s AND movie_id = %s",
-            (user_id, movie_id)
-        )
-        if cur.fetchone():
-            cur.close()
-            conn.close()
-            return jsonify({"error": "Film jest już na wishliście"}), 400
-
-        cur.execute(
-            "SELECT id FROM watchlist WHERE user_id = %s AND movie_id = %s",
-            (user_id, movie_id)
-        )
-        if cur.fetchone():
-            cur.close()
-            conn.close()
-            return jsonify({"error": "Film jest już oznaczony jako obejrzany"}), 400
-
-        # Dodanie do wishlisty
-        cur.execute(
-            "INSERT INTO wishlist (user_id, movie_id) VALUES (%s, %s) RETURNING id, added_at",
-            (user_id, movie_id)
-        )
-        new_entry = cur.fetchone()
-        conn.commit()
-        cur.close()
-        conn.close()
-
-        return jsonify({
-            "id": str(new_entry[0]),
-            "movie_id": movie_id,
-            "user_id": user_id,
-            "added_at": new_entry[1].isoformat()
-        }), 201
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-# pobranie listy ulubionych filmów
-@app.route('/api/movies/likes', methods=['GET'])
-def get_liked_movies():
-    """
-    Pobierz listę filmów polubionych przez zalogowanego użytkownika
-    ---
-    tags:
-      - Filmy
-    responses:
-      200:
-        description: Lista ID filmów polubionych przez użytkownika
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                likes:
-                  type: array
-                  items:
-                    type: string
-                  example: ["123", "456", "789"]
-      401:
-        description: Użytkownik niezalogowany
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                  example: "Nie jesteś zalogowany"
-      500:
-        description: Błąd serwera
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                  example: "Błąd serwera"
-    """
-
-    user_id = session.get('user_id')
-    if not user_id:
-        return jsonify({"error": "Nie jesteś zalogowany"}), 401
-    
-    try:
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute("SELECT movie_id FROM likes WHERE user_id = %s", (user_id,))
-        rows = cur.fetchall()
-        cur.close()
-        conn.close()
-
-        movie_ids = [str(row[0]) for row in rows]
-        return jsonify({"likes": movie_ids}), 200
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-# usunięcie wskazanego filmu z listy ulubionych    
-@app.route('/api/movies/likes/<movie_id>', methods=['DELETE'])
-def remove_from_likes(movie_id):
-    """
-    Usuń film z polubionych użytkownika
-    ---
-    tags:
-      - Filmy
-    parameters:
-      - name: movie_id
-        in: path
-        type: string
-        required: true
-        description: ID filmu do usunięcia z polubionych
-    responses:
-      200:
-        description: Film został usunięty z polubionych
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-                  example: "Film usunięty z likes"
-      401:
-        description: Użytkownik niezalogowany
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                  example: "Nie jesteś zalogowany"
-      404:
-        description: Film nie znaleziony w polubionych
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                  example: "Film nie znaleziony w likes"
-      500:
-        description: Błąd serwera
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                  example: "Błąd serwera"
-    """
-    
-    user_id = session.get('user_id')
-    if not user_id:
-        return jsonify({"error": "Nie jesteś zalogowany"}), 401
-
-    try:
-        conn = get_db_connection()
-        cur = conn.cursor()
-
-        cur.execute(
-            "DELETE FROM likes WHERE user_id = %s AND movie_id = %s RETURNING id",
-            (user_id, movie_id)
-        )
-        deleted = cur.fetchone()
-        conn.commit()
-        cur.close()
-        conn.close()
-
-        if deleted:
-            return jsonify({"message": "Film usunięty z likes"}), 200
-        else:
-            return jsonify({"error": "Film nie znaleziony w likes"}), 404
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-# dodanie filmu do listy ulubionych    
-@app.route('/api/movies/likes/<movie_id>', methods=['POST'])
-def add_to_likes(movie_id):
-    """
-    Dodaj film do polubionych użytkownika
-    ---
-    tags:
-      - Filmy
-    parameters:
-      - name: movie_id
-        in: path
-        type: string
-        required: true
-        description: ID filmu do dodania do polubionych
-    responses:
-      201:
-        description: Film został dodany do polubionych
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                  example: "123"
-                movie_id:
-                  type: string
-                  example: "456"
-                user_id:
-                  type: string
-                  example: "789"
-                created_at:
-                  type: string
-                  format: date-time
-                  example: "2025-05-28T12:34:56.789Z"
-      400:
-        description: Film jest już w polubionych
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                  example: "Film jest już w likes"
-      401:
-        description: Użytkownik niezalogowany
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                  example: "Nie jesteś zalogowany"
-      500:
-        description: Błąd serwera
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                  example: "Błąd serwera"
-    """
-    
-    user_id = session.get('user_id')
-    if not user_id:
-        return jsonify({"error": "Nie jesteś zalogowany"}), 401
-
-    try:
-        conn = get_db_connection()
-        cur = conn.cursor()
-
-        # Sprawdź czy już jest taki rekord (unikalność)
-        cur.execute(
-            "SELECT id FROM likes WHERE user_id = %s AND movie_id = %s",
-            (user_id, movie_id)
-        )
-        if cur.fetchone():
-            cur.close()
-            conn.close()
-            return jsonify({"error": "Film jest już w likes"}), 400
-
-        cur.execute(
-            "INSERT INTO likes (user_id, movie_id) VALUES (%s, %s) RETURNING id, created_at",
-            (user_id, movie_id)
-        )
-        new_entry = cur.fetchone()
-        conn.commit()
-        cur.close()
-        conn.close()
-
-        return jsonify({
-            "id": str(new_entry[0]),
-            "movie_id": movie_id,
-            "user_id": user_id,
-            "created_at": new_entry[1].isoformat()
         }), 201
 
     except Exception as e:
