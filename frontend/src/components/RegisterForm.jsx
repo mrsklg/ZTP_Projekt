@@ -4,17 +4,25 @@ import {user} from 'react-icons-kit/fa/user';
 import {lock} from 'react-icons-kit/ikons/lock';
 import {mail} from 'react-icons-kit/ikons/mail'
 import { Icon } from 'react-icons-kit';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function RegisterForm() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [name, setName] = useState("")
     const [surname, setSurname] = useState("")
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await registerUser(email, password, name, surname);
+        const data = await registerUser(email, password, name, surname);
+        console.log(data);
+
+        if (data.id) {
+            navigate("/login");
+        } else {
+            alert("Register failed: " + (data.error || "Unknown error"));
+        }
     }
 
     return (

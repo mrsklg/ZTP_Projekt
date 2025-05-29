@@ -3,15 +3,23 @@ import { loginUser } from "../api/auth";
 import { mail } from 'react-icons-kit/ikons/mail'
 import { lock } from 'react-icons-kit/ikons/lock';
 import { Icon } from 'react-icons-kit';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await loginUser(email, password);
+        const data = await loginUser(email, password);
+        console.log(data);
+
+        if (data.id) {
+            navigate("/dashboard");
+        } else {
+            alert("Login failed: " + (data.error || "Unknown error"));
+        }
     }
 
     return (
