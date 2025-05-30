@@ -8,15 +8,20 @@ import {
 import { check, clockO, signOut, bars } from 'react-icons-kit/fa/'
 import { Icon } from 'react-icons-kit';
 import { useState } from "react";
+import { logoutUser } from "../api/auth";
 
 export default function Menu() {
 
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const navigate = useNavigate();
     
-    const handleLogout = () => {
-        localStorage.removeItem('authToken');
-        navigate('/login');
+    const handleLogout = async () => {
+        const data = await logoutUser();
+        if (data.message === "Wylogowano") {
+            navigate('/login');
+        } else {
+            alert('Nastąpił problem z wylogowaniem');
+        }
     };
 
     const menuItems = [

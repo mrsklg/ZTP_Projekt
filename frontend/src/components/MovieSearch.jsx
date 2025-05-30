@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import SearchBar from './SearchBar';
 import MovieResult from './MovieResult';
 import { fetchMovies } from '../api/movies';
+import { BeatLoader } from "react-spinners";
 
 export default function MovieSearch({ showLimit = false, maxResults = 3, withPagination = false, initialQuery = '' }) {
     const [query, setQuery] = useState('');
@@ -51,7 +52,7 @@ export default function MovieSearch({ showLimit = false, maxResults = 3, withPag
     }, [query, initialQuery]);
 
     return (
-        <div className={`${showLimit ? 'limited-search-container' : 'search-container'}`}>
+            <div className={showLimit ? 'limited-search-container' : 'search-container'}>
             <SearchBar
                 query={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -61,30 +62,34 @@ export default function MovieSearch({ showLimit = false, maxResults = 3, withPag
             {error && <p>Error: {error}</p>}
             {movies && movies.length > 0 && (
                 <div className="search-results">
-                    <h2 className={`${showLimit ? 'search-header-small' : ''}`}>Search Results</h2>
-                    {(showLimit ? movies.slice(0, maxResults) : movies).map((movie) => (
-                        <MovieResult
-                            key={movie.imdbID}
-                            movie={movie}
-                            showLimit={showLimit}
-                        />
-                    ))}
-                    {showLimit && movies.length > maxResults && (
-                        <button className="show-more" onClick={handleSeeMoreClick}>
-                            Show more
-                        </button>
-                    )}
-                    {withPagination && (
-                        <div className="pagination">
-                            {/* Tutaj dodaj komponent do paginacji  jak bedzie czas<p>Pagination goes here</p>*/}
-                            
-                        </div>
+                    <h2 className={showLimit ? 'search-header-small' : ''}>Search Results</h2>
+                    {loading ? (
+                        <BeatLoader />
+                    ) : (
+                        <>
+                            {(showLimit ? movies.slice(0, maxResults) : movies).map((movie) => (
+                                <MovieResult
+                                    key={movie.imdbID}
+                                    movie={movie}
+                                    showLimit={showLimit}
+                                />
+                            ))}
+                            {showLimit && movies.length > maxResults && (
+                                <button className="show-more" onClick={handleSeeMoreClick}>
+                                    Show more
+                                </button>
+                            )}
+                            {withPagination && (
+                                <div className="pagination">
+                                    {/* Tutaj dodaj komponent do paginacji jak będzie czas */}
+                                    {/* <PaginationComponent /> */}
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
             )}
-
         </div>
-
-    )
+    );
 
 }
