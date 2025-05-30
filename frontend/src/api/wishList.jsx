@@ -12,7 +12,6 @@ export async function addToWishList(imdbID){
     })
     // alert("Tu sie powinno dodać do wishListy")
     const data = await response.json();
-    console.log(data);
 
     return data;
 }
@@ -29,7 +28,6 @@ export async function removeFromWishList(imdbID){
     })
     // alert("Tu sie powinno usunąć z wishListy")
     const data = await response.json();
-    console.log(data);
     
     return data;
 }

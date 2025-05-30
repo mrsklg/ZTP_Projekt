@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom';
 import MovieTile from '../components/MovieTile';
 import { getMovie } from '../api/movies';
 import { fetchMoviesFromLists } from '../api/fetchLists';
+import { addToWatchList, removeFromWatchList } from '../api/watchList';
+import { addToWishList, removeFromWishList } from '../api/wishList';
 import "../styles/filmDetails.css"
 
 export default function FilmDetailsPage() {
@@ -34,6 +36,28 @@ export default function FilmDetailsPage() {
     fetchData();
   }, [id]);
 
+  const handleAddToWatchlist = (movie) => {
+    setWatchlistMovies(prev => [...prev, movie]);
+    setWishlistMovies(prev => prev.filter(m => m.imdbID !== movie.imdbID)); // jeśli przenosisz z wishlist
+    addToWatchList(movie.imdbID);
+  };
+  
+  const handleRemoveFromWatchlist = (movie) => {
+    setWatchlistMovies(prev => prev.filter(m => m.imdbID !== movie.imdbID));
+    removeFromWatchList(movie.imdbID);
+  };
+  
+  const handleAddToWishlist = (movie) => {
+    setWishlistMovies(prev => [...prev, movie]);
+    setWatchlistMovies(prev => prev.filter(m => m.imdbID !== movie.imdbID));
+    addToWishList(movie.imdbID);
+  };
+  
+  const handleRemoveFromWishlist = (movie) => {
+    setWishlistMovies(prev => prev.filter(m => m.imdbID !== movie.imdbID));
+    removeFromWishList(movie.imdbID);
+  };
+
   const isInList = (list) => list.some((m) => m.imdbID === id);
 
   const getCurrentList = () => {
@@ -54,6 +78,10 @@ export default function FilmDetailsPage() {
           opposingList={
             getCurrentList() === "wishlist" ? watchlistMovies : wishlistMovies
           }
+          onAddToWatchlist={handleAddToWatchlist}
+          onRemoveFromWatchlist={handleRemoveFromWatchlist}
+          onAddToWishlist={handleAddToWishlist}
+          onRemoveFromWishlist={handleRemoveFromWishlist}
         />
       )}
     </>

@@ -12,7 +12,6 @@ export async function addToWatchList(imdbID) {
     })
     // alert("Tu sie powinno dodać do watchListy")
     const data = await response.json();
-    console.log(data);
 
     return data;
 }
@@ -30,7 +29,6 @@ export async function removeFromWatchList(imdbID) {
     // alert("Tu się powinno usunąć z watchListy")
 
     const data = await response.json();
-    console.log(data);
 
     return data;
 }

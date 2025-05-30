@@ -11,6 +11,8 @@ export default function MovieResult({ movie, showLimit }) {
     const navigate = useNavigate();
     const [wishlistMovies, setWishlistMovies] = useState([]);
     const [watchlistMovies, setWatchlistMovies] = useState([]);
+    const [wishlistMoviesLocal, setWishlistMoviesLocal] = useState([]);
+    const [watchlistMoviesLocal, setWatchlistMoviesLocal] = useState([]);
     const [isLoadingLists, setIsLoadingLists] = useState(true);
 
     useEffect(() => {
@@ -20,6 +22,8 @@ export default function MovieResult({ movie, showLimit }) {
 
                 setWishlistMovies(wishlistMovies);
                 setWatchlistMovies(watchlistMovies);
+                setWishlistMoviesLocal(wishlistMovies);
+                setWatchlistMoviesLocal(watchlistMovies);
             } catch (error) {
                 console.error('Error fetching movies:', error);
             } finally {
@@ -34,16 +38,20 @@ export default function MovieResult({ movie, showLimit }) {
     };
 
     const handleAddWishlist = () => {
-        console.log(wishlistMovies);
         addToWishList(movie.imdbID);
+        setWishlistMoviesLocal(prev => [...prev, movie]);
     };
 
     const handleAddWatchlist = () => {
         addToWatchList(movie.imdbID);
+        setWishlistMoviesLocal(prev => prev.filter(m => m.imdbID !== movie.imdbID))
+        setWatchlistMoviesLocal(prev => [...prev, movie])
+
+        setTimeout(() => {}, 0);
     };
 
-    const inWishlist = wishlistMovies?.some(m => m.imdbID === movie.imdbID);
-    const inWatchlist = watchlistMovies?.some(m => m.imdbID === movie.imdbID);
+    const inWishlist = wishlistMoviesLocal?.some(m => m.imdbID === movie.imdbID);
+    const inWatchlist = watchlistMoviesLocal?.some(m => m.imdbID === movie.imdbID);
 
     return (
         <div
@@ -75,7 +83,7 @@ export default function MovieResult({ movie, showLimit }) {
                                     e.stopPropagation();
                                     handleAddWishlist();
                                 }}>
-                                Add to favorites/wishlist
+                                Add to wishlist
                                 </button>
                                 <button className='movie-options-button'
                                 onClick={(e) => {

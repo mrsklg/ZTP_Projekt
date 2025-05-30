@@ -15,9 +15,6 @@ export async function fetchMoviesFromLists() {
   const wishlistData = await wishlistRes.json();
   const watchlistData = await watchlistRes.json();
 
-  console.log(wishlistData)
-  console.log(watchlistData)
-
   if (!Array.isArray(wishlistData.wishlist) || !Array.isArray(watchlistData.watchlist)) {
     throw new Error("Nieprawidłowy format danych.");
   }
