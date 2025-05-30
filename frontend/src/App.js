@@ -9,7 +9,6 @@ import FilmDetailsPage from './pages/FilmDetailsPage';
 import SettingsPage from './pages/SettingsPage';
 import ToWatchPage from './pages/ToWatchPage';
 import WatchedPage from './pages/WatchedPage';
-import LinksPage from './pages/LinksPage';
 import Layout from './components/Layout';
 import LayoutNotLogged from './components/LayoutNotLogged';
 import { AuthProvider } from './components/AuthContext';
