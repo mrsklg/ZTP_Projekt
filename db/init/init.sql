@@ -15,7 +15,7 @@ CREATE TABLE users (
 CREATE TABLE likes (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-    movie_id UUID NOT NULL,
+    movie_id TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(user_id, movie_id)
 );
@@ -24,7 +24,7 @@ CREATE TABLE likes (
 CREATE TABLE wishlist (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-    movie_id UUID NOT NULL,
+    movie_id TEXT NOT NULL,
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(user_id, movie_id)
 );
@@ -33,7 +33,7 @@ CREATE TABLE wishlist (
 CREATE TABLE watchlist (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-    movie_id UUID NOT NULL,
+    movie_id TEXT NOT NULL,
     watched_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(user_id, movie_id)
 );

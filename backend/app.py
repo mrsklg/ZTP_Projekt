@@ -17,7 +17,7 @@ def get_db_connection():
 app = Flask(__name__)
 app.secret_key = 'bardzo_tajne_haslo'
 app.permanent_session_lifetime = timedelta(days=7)
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:3001"}}, supports_credentials=True)
+CORS(app, resources={r"/api/*": {"origins": ["http://localhost:3001", "http://127.0.0.1:3001"]}}, supports_credentials=True)
 
 swagger = Swagger(app)  #http://localhost:5000/apidocs/
 
@@ -1557,7 +1557,7 @@ def add_to_watchlist():
         cur.close()
         conn.close()
         
-        remove_from_wishlist(movie_id)
+        remove_from_wishlist_internal(user_id, movie_id)
 
         return jsonify({
             "id": str(new_entry[0]),
@@ -1569,6 +1569,25 @@ def add_to_watchlist():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+def remove_from_wishlist_internal(user_id, movie_id):
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        cur.execute(
+            "DELETE FROM wishlist WHERE user_id = %s AND movie_id = %s RETURNING id",
+            (user_id, movie_id)
+        )
+        deleted = cur.fetchone()
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        return deleted is not None
+
+    except Exception as e:
+        print(f"Błąd usuwania z wishlisty: {e}")
+        return False
 
 
 if __name__ == '__main__':

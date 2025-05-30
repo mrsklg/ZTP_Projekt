@@ -15,12 +15,15 @@ export async function fetchMoviesFromLists() {
   const wishlistData = await wishlistRes.json();
   const watchlistData = await watchlistRes.json();
 
-  if (!Array.isArray(wishlistData) || !Array.isArray(watchlistData)) {
+  console.log(wishlistData)
+  console.log(watchlistData)
+
+  if (!Array.isArray(wishlistData.wishlist) || !Array.isArray(watchlistData.watchlist)) {
     throw new Error("Nieprawidłowy format danych.");
   }
 
-  const wishlistMovies = await Promise.all(wishlistData.map((id) => getMovie(id)));
-  const watchlistMovies = await Promise.all(watchlistData.map((id) => getMovie(id)));
+  const wishlistMovies = await Promise.all(wishlistData.wishlist.map((id) => getMovie(id)));
+  const watchlistMovies = await Promise.all(watchlistData.watchlist.map((id) => getMovie(id)));
 
   return { wishlistMovies, watchlistMovies };
 }

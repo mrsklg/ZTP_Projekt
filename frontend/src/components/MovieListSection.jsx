@@ -2,7 +2,18 @@ import { useNavigate } from 'react-router-dom';
 import MovieTile from "./MovieTile";
 import "../styles/movie.css"
 
-export default function MovieListSection({ title, movies, maxItems = null, seeMoreLink = null, opposingList, additionalClass }) {
+export default function MovieListSection({ 
+    title, 
+    movies, 
+    maxItems = null, 
+    seeMoreLink = null, 
+    opposingList, 
+    additionalClass, 
+    onAddToWatchlist,
+    onRemoveFromWatchlist,
+    onAddToWishlist,
+    onRemoveFromWishlist
+    }) {
     const displayedMovies = maxItems ? movies.slice(0, maxItems) : movies;
     const navigate = useNavigate();
 
@@ -22,7 +33,16 @@ export default function MovieListSection({ title, movies, maxItems = null, seeMo
             </div>
             <div className="movie-grid">
                 {displayedMovies.map((movie) => (
-                    <MovieTile key={movie.id} movie={movie} currentList={currentList} opposingList={opposingList} />
+                    <MovieTile 
+                        key={movie.id} 
+                        movie={movie} 
+                        currentList={currentList} 
+                        opposingList={opposingList} 
+                        onAddToWatchlist={onAddToWatchlist}
+                        onRemoveFromWatchlist={onRemoveFromWatchlist}
+                        onAddToWishlist={onAddToWishlist}
+                        onRemoveFromWishlist={onRemoveFromWishlist}
+                    />
                 ))}
             </div>
         </section>
