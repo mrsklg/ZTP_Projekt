@@ -17,7 +17,6 @@ if (!res.ok) {
     throw new Error(data.error || "Błąd zmiany hasła.");
 }
 
-console.log(data)
 return data;
 }
 
@@ -35,7 +34,6 @@ export async function deleteAccount() {
       throw new Error(data.error || "Nie udało się usunąć konta.");
     }
 
-    console.log(data);
     return data;  
   }
   

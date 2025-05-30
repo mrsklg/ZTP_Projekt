@@ -4,8 +4,11 @@ import { mail } from 'react-icons-kit/ikons/mail'
 import { lock } from 'react-icons-kit/ikons/lock';
 import { Icon } from 'react-icons-kit';
 import { Link, useNavigate } from "react-router-dom";
+import { useContext } from 'react';
+import { AuthContext } from "./AuthContext";
 
 export default function LoginForm() {
+    const { login } = useContext(AuthContext);
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const navigate = useNavigate();
@@ -13,9 +16,9 @@ export default function LoginForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const data = await loginUser(email, password);
-        console.log(data);
 
         if (data.id) {
+            login();
             navigate("/dashboard");
         } else {
             alert("Login failed: " + (data.error || "Unknown error"));

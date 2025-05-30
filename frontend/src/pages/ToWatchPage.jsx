@@ -53,7 +53,6 @@ export default function ToWatchPage() {
 
   return (
     <>
-      {loading && <p>Loading...</p>}
       {error && <p className="error">{error}</p>}
       <MovieListSection
         title="To watch list"
@@ -63,6 +62,7 @@ export default function ToWatchPage() {
         onRemoveFromWatchlist={handleRemoveFromWatchlist}
         onAddToWishlist={handleAddToWishlist}
         onRemoveFromWishlist={handleRemoveFromWishlist}
+        isLoading={loading}
       >
       </MovieListSection>
     </>

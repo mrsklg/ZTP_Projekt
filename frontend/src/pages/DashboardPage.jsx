@@ -25,9 +25,6 @@ export default function DashboardPage() {
 
       setWishlistMovies(wishlistMovies);
       setWatchlistMovies(watchlistMovies);
-
-      console.log(`wishlist w dashboard: ${wishlistMovies}`)
-      console.log(`watchlist w dashboard: ${watchlistMovies}`)
     } catch (err) {
       setError(err.message || "Błąd podczas ładowania danych.");
     } finally {
@@ -60,7 +57,6 @@ export default function DashboardPage() {
 
   return (
     <>
-      {loading && <p>Loading...</p>}
       {error && <p className="error">{error}</p>}
         <title>Dashboard</title>
         <div className='dashboard-summary'>
@@ -87,6 +83,7 @@ export default function DashboardPage() {
               onRemoveFromWatchlist={handleRemoveFromWatchlist}
               onAddToWishlist={handleAddToWishlist}
               onRemoveFromWishlist={handleRemoveFromWishlist}
+              isLoading={loading}
               />
         <MovieListSection
               title="To watch list"
@@ -99,6 +96,7 @@ export default function DashboardPage() {
               onRemoveFromWatchlist={handleRemoveFromWatchlist}
               onAddToWishlist={handleAddToWishlist}
               onRemoveFromWishlist={handleRemoveFromWishlist}
+              isLoading={loading}
         />
     </>
   );

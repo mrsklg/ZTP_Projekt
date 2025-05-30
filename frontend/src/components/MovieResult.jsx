@@ -1,6 +1,7 @@
 import '../styles/search.css'
 import { useNavigate } from 'react-router-dom';
 import noPoster from '../assets/No data.svg';
+import { BeatLoader } from "react-spinners";
 import { addToWishList } from '../api/wishList';
 import { addToWatchList } from '../api/watchList';
 import { fetchMoviesFromLists } from '../api/fetchLists';
@@ -10,17 +11,25 @@ export default function MovieResult({ movie, showLimit }) {
     const navigate = useNavigate();
     const [wishlistMovies, setWishlistMovies] = useState([]);
     const [watchlistMovies, setWatchlistMovies] = useState([]);
+    const [wishlistMoviesLocal, setWishlistMoviesLocal] = useState([]);
+    const [watchlistMoviesLocal, setWatchlistMoviesLocal] = useState([]);
+    const [isLoadingLists, setIsLoadingLists] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
-            const { wishlistMovies, watchlistMovies } = await fetchMoviesFromLists();
+            try {
+                const { wishlistMovies, watchlistMovies } = await fetchMoviesFromLists();
 
-            setWishlistMovies(wishlistMovies);
-            setWatchlistMovies(watchlistMovies);
-
-            console.log(wishlistMovies)
+                setWishlistMovies(wishlistMovies);
+                setWatchlistMovies(watchlistMovies);
+                setWishlistMoviesLocal(wishlistMovies);
+                setWatchlistMoviesLocal(watchlistMovies);
+            } catch (error) {
+                console.error('Error fetching movies:', error);
+            } finally {
+                setIsLoadingLists(false);
+            }
         };
-    
         fetchData();
       }, []);
 
@@ -29,13 +38,20 @@ export default function MovieResult({ movie, showLimit }) {
     };
 
     const handleAddWishlist = () => {
-        console.log(wishlistMovies);
         addToWishList(movie.imdbID);
+        setWishlistMoviesLocal(prev => [...prev, movie]);
     };
 
     const handleAddWatchlist = () => {
         addToWatchList(movie.imdbID);
+        setWishlistMoviesLocal(prev => prev.filter(m => m.imdbID !== movie.imdbID))
+        setWatchlistMoviesLocal(prev => [...prev, movie])
+
+        setTimeout(() => {}, 0);
     };
+
+    const inWishlist = wishlistMoviesLocal?.some(m => m.imdbID === movie.imdbID);
+    const inWatchlist = watchlistMoviesLocal?.some(m => m.imdbID === movie.imdbID);
 
     return (
         <div
@@ -54,49 +70,52 @@ export default function MovieResult({ movie, showLimit }) {
                     <p>{movie.Type}</p>
                 </div>
             </div>
-            {!showLimit &&
+            {!showLimit && (
                 <div className='movie-options'>
-                    {!watchlistMovies?.some(m => m.imdbID === movie.imdbID) && !wishlistMovies?.some(m => m.imdbID === movie.imdbID) && (
-                    <>
-                        <button className='movie-options-button'
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            handleAddWishlist();
-                        }}>
-                        Add to favorites/wishlist
-                        </button>
-                        <button className='movie-options-button'
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            handleAddWatchlist();
-                        }}>
-                        Add to watchlist
-                        </button>
-                    </>
-                    )}
+                    {isLoadingLists ? (
+                        <BeatLoader color="#36d7b7" />
+                    ) : (
+                        <>
+                            {!inWatchlist && !inWishlist && (
+                            <>
+                                <button className='movie-options-button'
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleAddWishlist();
+                                }}>
+                                Add to wishlist
+                                </button>
+                                <button className='movie-options-button'
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleAddWatchlist();
+                                }}>
+                                Add to watchlist
+                                </button>
+                            </>
+                            )}
 
-                    {!watchlistMovies?.some(m => m.imdbID === movie.imdbID) && wishlistMovies?.some(m => m.imdbID === movie.imdbID) && (
-                    <button className='movie-options-button'
-                        onClick={(e) => {
-                        e.stopPropagation();
-                        handleAddWatchlist();
-                        }}>
-                        Add to watchlist
-                    </button>
-                    )}
+                            {!inWatchlist && inWishlist && (
+                            <button className='movie-options-button'
+                                onClick={(e) => {
+                                e.stopPropagation();
+                                handleAddWatchlist();
+                                }}>
+                                Add to watchlist
+                            </button>
+                            )}
 
-                    {watchlistMovies?.some(m => m.imdbID === movie.imdbID) && !wishlistMovies?.some(m => m.imdbID === movie.imdbID) && (
-                     <div className='movie-options-button info'>
-                     Already in watchlist
-                    </div>
+                            {inWatchlist && !inWishlist && (
+                            <div className='movie-options-button info'>
+                            Already in watchlist
+                            </div>
+                            )}
+                        </>
                     )}
-
                 </div>
-            }
-
+            )}
         </div>
-
-    )
+    );
 
 }
 
