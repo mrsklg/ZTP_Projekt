@@ -1,5 +1,5 @@
 import '../styles/search.css'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import noPoster from '../assets/No data.svg';
 import { BeatLoader } from "react-spinners";
 import { addToWishList } from '../api/wishList';

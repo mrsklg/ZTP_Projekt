@@ -2,14 +2,13 @@ import './styles/global.css'
 import React from 'react';
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from './pages/RegisterPage';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router';
 import DashboardPage from './pages/DashboardPage';
 import BrowsePage from './pages/BrowsePage';
 import FilmDetailsPage from './pages/FilmDetailsPage';
 import SettingsPage from './pages/SettingsPage';
 import ToWatchPage from './pages/ToWatchPage';
 import WatchedPage from './pages/WatchedPage';
-//import LinksPage from './pages/LinksPage';
 import Layout from './components/Layout';
 import LayoutNotLogged from './components/LayoutNotLogged';
 import { AuthProvider } from './components/AuthContext';

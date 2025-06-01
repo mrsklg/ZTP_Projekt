@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import MovieTile from "./MovieTile";
 import { BeatLoader } from "react-spinners";
 import "../styles/movie.css"

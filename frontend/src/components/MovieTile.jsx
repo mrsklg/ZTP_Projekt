@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import noPoster from '../assets/No data.svg';
 import '../styles/movie.css'
 // import { addToWatchList, removeFromWatchList } from '../api/watchList';
