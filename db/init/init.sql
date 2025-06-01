@@ -11,15 +11,6 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabela: Likes
-CREATE TABLE likes (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-    movie_id TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(user_id, movie_id)
-);
-
 -- Tabela: Wishlist (filmy do obejrzenia)
 CREATE TABLE wishlist (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
