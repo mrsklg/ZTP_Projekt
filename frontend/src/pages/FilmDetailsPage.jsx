@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import MovieTile from '../components/MovieTile';
 import { getMovie } from '../api/movies';
 import { fetchMoviesFromLists } from '../api/fetchLists';

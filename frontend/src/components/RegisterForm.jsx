@@ -4,7 +4,7 @@ import {user} from 'react-icons-kit/fa/user';
 import {lock} from 'react-icons-kit/ikons/lock';
 import {mail} from 'react-icons-kit/ikons/mail'
 import { Icon } from 'react-icons-kit';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router";
 
 export default function RegisterForm() {
     const [email, setEmail] = useState("")
@@ -32,26 +32,26 @@ export default function RegisterForm() {
                     <label className="form-label">Name
                         <div className="input-icon-wrapper">
                             <Icon icon={user} className="input-icon"/>
-                            <input value={name} onChange={e=>setName(e.target.value)} placeholder="Name" />
+                            <input value={name} onChange={e=>setName(e.target.value)} placeholder="Name" required minLength={3} maxLength={20} />
                         </div>
                     </label>
                     <label className="form-label">Surname
                         <div className="input-icon-wrapper">
                             <Icon icon={user} className="input-icon"/>
-                            <input value={surname} onChange={e=>setSurname(e.target.value)} placeholder="Surname" />
+                            <input value={surname} onChange={e=>setSurname(e.target.value)} placeholder="Surname" required min={3} maxLength={30} />
                         </div>
                     </label>
                 </div>
                 <label className="form-label">Email
                     <div className="input-icon-wrapper">
                         <Icon icon={mail} className="input-icon"/>
-                        <input value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email" />
+                        <input value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email" type="email" required />
                     </div>
                 </label>
                 <label className="form-label">Password
                     <div className="input-icon-wrapper">
                         <Icon icon={lock} className="input-icon"/>
-                        <input value={password} onChange={e=>setPassword(e.target.value)} type='password' placeholder="Password" />
+                        <input value={password} onChange={e=>setPassword(e.target.value)} type='password' placeholder="Password" required minLength={8} />
                     </div>
                 </label>
                 <div className="form-bottom">
