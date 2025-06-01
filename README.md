@@ -132,4 +132,5 @@ docker-compose up --build
 
 ## ERD
 Diagram bazy danych.
-![erd](https://github.com/user-attachments/assets/b2d73591-8dc6-4fe3-865a-af9d37bdc7a1)
+![Zrzut ekranu 2025-06-01 190153](https://github.com/user-attachments/assets/44681b34-ce15-4314-83be-cf864b8d0da3)
+
