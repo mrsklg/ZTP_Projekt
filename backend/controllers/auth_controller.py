@@ -30,7 +30,7 @@ def login():
               description: Adres email użytkownika
             password:
               type: string
-              example: mocneHaslo123!
+              example: Haslo123!
               description: Hasło użytkownika
     responses:
       200:

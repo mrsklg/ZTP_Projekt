@@ -28,7 +28,7 @@ def change_password():
           properties:
             old_password:
               type: string
-              example: stareHaslo123
+              example: Haslo123!
               description: Stare hasło użytkownika
             new_password:
               type: string
