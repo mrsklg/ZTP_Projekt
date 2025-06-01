@@ -19,3 +19,4 @@ referencing==0.36.2
 rpds-py==0.25.1
 typing-extensions==4.13.2
 flasgger==0.9.7.1
+flask-login==0.6.3

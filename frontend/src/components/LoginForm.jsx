@@ -33,13 +33,13 @@ export default function LoginForm() {
                 <label className="form-label">Email
                     <div className="input-icon-wrapper">
                         <Icon icon={mail} className="input-icon"/>
-                        <input value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email" />
+                        <input value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email" type="email" required />
                     </div>
                 </label>
                 <label className="form-label">Password
                     <div className="input-icon-wrapper">
                         <Icon icon={lock} className="input-icon"/>
-                        <input value={password} onChange={e=>setPassword(e.target.value)} type='password' placeholder="Password" />
+                        <input value={password} onChange={e=>setPassword(e.target.value)} type='password' placeholder="Password" required />
                     </div>
                 </label>
                 <div className="form-bottom">
